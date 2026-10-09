@@ -4,7 +4,7 @@ Portfólio estático de Eduardo Lorenzo ([srlorenzos](https://github.com/srloren
 
 ## Estrutura
 
-- `index.html`, `assets/`: página inicial. A lista de projetos fica em `assets/projetos.js` (para ativar o farol-rmm, troque `status` para `"pronto"` e preencha `demo`).
+- `index.html`, `assets/`: página inicial. A lista de projetos fica em `assets/projetos.js`.
 - `demos/<projeto>/`: uma demo por projeto, todas com dados fictícios.
 - `scripts/gerar-dados.mjs`: gera `demos/painel-organizze/api/*.json` (12 meses) a partir de `../painel-organizze`.
 - `netlify.toml`: publicação sem build, cabeçalhos de segurança e cache.
