@@ -14,19 +14,19 @@
     # Inline apenas em estilos (as demos usam style="..."); scripts só de arquivos do próprio site.
     Content-Security-Policy = "default-src 'self'; script-src 'self' 'wasm-unsafe-eval'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; font-src 'self'; connect-src 'self'; frame-src 'self'; worker-src 'self' blob:; object-src 'none'; base-uri 'none'; form-action 'none'; frame-ancestors 'self'"
 
-# Assets sem hash no nome: cache de 1 dia, revalidando em segundo plano por 1 semana.
+# Assets sem hash no nome: o navegador sempre revalida (ETag), então cada deploy aparece na hora.
 [[headers]]
   for = "/assets/*"
   [headers.values]
-    Cache-Control = "public, max-age=86400, stale-while-revalidate=604800"
+    Cache-Control = "public, max-age=0, must-revalidate"
 
 [[headers]]
   for = "/demos/*"
   [headers.values]
-    Cache-Control = "public, max-age=3600, stale-while-revalidate=86400"
+    Cache-Control = "public, max-age=0, must-revalidate"
 
 # Dados estáticos da demo do painel mudam quando o script é rodado de novo.
 [[headers]]
   for = "/demos/painel-organizze/api/*"
   [headers.values]
-    Cache-Control = "public, max-age=300"
+    Cache-Control = "public, max-age=0, must-revalidate"
