@@ -135,8 +135,10 @@ document.addEventListener("keydown", e => { if((e.key==="Enter"||e.key===" ") &&
 /* ============================================================ API (pywebview ou demonstração) */
 let API=null, booted=false;
 const call = async (fn,...a) => { try{ return await API[fn](...a); } catch(e){ console.error(fn,e); toast("Erro: "+(e.message||e),"erro"); return {ok:false,erro:String(e)}; } };
-window.addEventListener("pywebviewready",()=>{ API=window.pywebview.api; boot(); });
-setTimeout(()=>{ if(!API && !window.pywebview){ API=MockAPI(); document.body.insertAdjacentHTML("beforeend",`<div class="demo-flag">Demonstração interativa · dados simulados</div>`); boot(); } }, 700);
+function usarDemo(){ if(API) return; API=MockAPI(); document.body.insertAdjacentHTML("beforeend",`<div class="demo-flag">Demonstração interativa · dados simulados</div>`); boot(); }
+window.addEventListener("pywebviewready",()=>{ if(API) return; const api=window.pywebview?.api; if(api && typeof api.estado==="function"){ API=api; boot(); } else usarDemo(); });
+setTimeout(()=>{ if(!API && !window.pywebview) usarDemo(); }, 700);
+setTimeout(()=>{ if(!API) usarDemo(); }, 4000);
 
 /* ============================================================ estado da UI */
 const S = {page:"painel", est:null, cfg:null, lastLog:0, logs:[], news:[], newsFiltro:"todas", hist:[], histOrd:["quando",-1], bt:null, btAtivo:null, busy:false};
@@ -192,10 +194,14 @@ function renderChrome(){
   setHTML($("#hdrStatus"),st);
   const L=e.licenca;
   setHTML($("#planCard"),`<div class="row"><div style="flex:1"><b>Plano ${esc(L.plano)}</b><span>${L.plano==="Demonstração"?"Desbloqueie o modo real":esc(L.email)}</span></div>${ic(L.plano==="Pro"?"spark":"key")}</div>`);
-  setHTML($("#ver"),`v${e.versao} · ${e.agentes_em_uso.length} agentes ativos`);
+  setHTML($("#ver"),`v${e.versao} · ${e.agentes_em_uso.length} agentes ativos · <span class="kbd">Ctrl</span>+<span class="kbd">1–9</span> navega`);
   renderNav();
 }
 async function tick(){
+  if(S.tickando) return; S.tickando=true;
+  try{ await tick_(); } finally{ S.tickando=false; }
+}
+async function tick_(){
   const e = await call("estado", S.lastLog);
   if(!e || e.ok===false) return;
   S.est=e;
@@ -391,7 +397,7 @@ function pgBacktest(){
   const AT=S.cfg.config.ativos; S.btAtivo = S.btAtivo || AT[0]?.nome;
   const r=S.bt;
   $("#pg").innerHTML=`<div class="card row wrap" style="gap:14px"><div class="field" style="min-width:240px"><label>Ativo</label><select class="inp" id="btSel">${AT.map(a=>`<option ${a.nome===S.btAtivo?"selected":""}>${esc(a.nome)}</option>`).join("")}</select></div>
-    <div class="muted" style="flex:1;font-size:13px;min-width:260px">Roda os agentes liberados nas últimas ~1.000 barras de ${S.cfg.config.timeframe_min} min com as suas regras de risco, stop, alvo e custos — e com o aprendizado de pesos ligado. O agente de notícias fica de fora (não há manchetes históricas).</div>
+    <div class="muted" style="flex:1;font-size:13px;min-width:260px">Roda os agentes liberados em todo o histórico disponível (até ~4.000 barras de ${S.cfg.config.timeframe_min} min) com as suas regras de risco, stop, alvo e custos — e com o aprendizado de pesos ligado. O agente de notícias fica de fora (não há manchetes históricas).</div>
     <button class="btn pri" id="btGo" ${A("rodarBT")} data-el>${ic("flask")}Rodar backtest</button></div>
     <div id="btRes" class="mt">${r?btHTML(r):`<div class="card empty">${ic("flask")}<div>Escolha um ativo e rode o backtest</div><div class="faint" style="font-size:12px">Leva de 5 a 30 segundos</div></div>`}</div>`;
   $("#btSel").onchange=e=>S.btAtivo=e.target.value;
