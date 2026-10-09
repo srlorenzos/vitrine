@@ -1,5 +1,5 @@
-// Lista única de projetos da vitrine. Para ativar o Farol RMM depois:
-// troque status para "pronto" e preencha "demo" (ex.: "demos/farol-rmm/").
+// Lista única de projetos da vitrine. Para um projeto sem demo ainda, use
+// status "em-breve" e demo null; para ativar, status "pronto" e demo "demos/<id>/".
 export const GITHUB = 'https://github.com/srlorenzos';
 
 export const categorias = [
@@ -100,8 +100,8 @@ export const projetos = [
     tags: ['Node', 'Agente Python', 'WebSocket', '2FA'],
     icone: 'farol',
     preview: 'farol',
-    status: 'em-breve',
-    demo: null,
+    status: 'pronto',
+    demo: 'demos/farol-rmm/',
     codigo: `${GITHUB}/farol-rmm`,
   },
 ];

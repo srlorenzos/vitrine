@@ -1,0 +1,11 @@
+/* Ajustes da demo: a faixa fixa no topo não pode cobrir o painel. --demo-h é medida por js/demo-ui.js. */
+:root { --demo-h: 52px; }
+.demo-barra { position: sticky; top: 0; z-index: 100; min-height: 0; }
+.demo-selo { flex: 0 1 auto; }
+.app { min-height: calc(100vh - var(--demo-h)); }
+.lateral { top: var(--demo-h); }
+.topo-movel { top: var(--demo-h); }
+.carregando-inicial, .tela-login { min-height: calc(100vh - var(--demo-h)); }
+.aviso-demo { margin: 0; padding: 8px 10px; border-radius: 8px; font-size: 0.85rem; text-align: center;
+  color: var(--texto); background: var(--acento-suave); border: 1px dashed var(--acento); }
+.aviso-demo code, .aviso-demo strong { font-family: var(--mono); font-weight: 650; }
