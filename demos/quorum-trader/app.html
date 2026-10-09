@@ -229,6 +229,88 @@ input[type=checkbox].ck2:checked{background:var(--brand) url("data:image/svg+xml
 .skel{background:linear-gradient(90deg,var(--surface2),var(--surface3),var(--surface2));background-size:200% 100%;animation:sk 1.3s infinite;border-radius:8px;color:transparent!important}
 @keyframes sk{to{background-position:-200% 0}}
 .demo-flag{position:fixed;left:16px;bottom:16px;z-index:300;background:var(--grad);color:#fff;font-weight:700;font-size:12px;padding:5px 12px;border-radius:99px;box-shadow:var(--shadow)}
+
+/* ---------- v2: painel ao vivo, estratégias, gráficos, copiloto, ferramentas, tour */
+h3.sec{font-size:15px;display:flex;align-items:center;gap:8px}
+.hero-vivo{padding:22px;background:radial-gradient(90% 140% at 0% 0%,rgba(124,108,255,.14),transparent 60%),var(--surface)}
+.hv-top{display:flex;align-items:center;gap:18px}
+.hv-orb{width:58px;height:58px;border-radius:18px;display:grid;place-items:center;background:var(--surface3);color:var(--muted);flex:none;position:relative}
+.hv-orb svg.i{width:26px;height:26px}
+.hv-orb.on{background:linear-gradient(135deg,#16A34A,#22C55E);color:#fff;box-shadow:0 0 0 0 rgba(34,197,94,.5);animation:orb 2s infinite}
+@keyframes orb{0%{box-shadow:0 0 0 0 rgba(34,197,94,.45)}70%{box-shadow:0 0 0 16px rgba(34,197,94,0)}100%{box-shadow:0 0 0 0 rgba(34,197,94,0)}}
+.hv-k{font-size:19px;font-weight:700;letter-spacing:-.3px;display:flex;align-items:center;gap:10px}
+.hv-t{color:#C9D3DF;margin-top:3px;font-size:14px}
+.hv-sub{display:flex;flex-wrap:wrap;gap:16px;margin-top:8px;font-size:12.5px;color:var(--muted)}
+.hv-sub span{display:inline-flex;align-items:center;gap:6px}.hv-sub svg.i{width:14px;height:14px}
+.stepper{display:flex;align-items:center;margin-top:20px;gap:6px}
+.stepper .st{display:flex;flex-direction:column;align-items:center;gap:6px;min-width:96px;color:var(--faint);font-size:12px;font-weight:600;text-align:center;transition:.3s}
+.stepper .st-i{width:40px;height:40px;border-radius:12px;display:grid;place-items:center;border:1px solid var(--border2);background:var(--bg2);transition:.3s}
+.stepper .st.feito{color:var(--muted)}.stepper .st.feito .st-i{border-color:rgba(34,197,94,.4);color:var(--up)}
+.stepper .st.atual{color:#fff}.stepper .st.atual .st-i{background:var(--grad);border-color:transparent;color:#fff;box-shadow:0 8px 22px -8px rgba(124,108,255,.9);animation:pul 1.4s ease-in-out infinite}
+@keyframes pul{50%{transform:scale(1.08)}}
+.stepper .st.sem{opacity:.45}.stepper .st small{color:var(--brand2);font-weight:700}
+.stepper .st-l{flex:1;height:2px;background:var(--border2);border-radius:2px;margin-bottom:22px}
+.stepper.off{opacity:.55;filter:grayscale(.6)}
+.av{display:grid;grid-template-columns:200px 120px 150px 1fr 90px;align-items:center;gap:16px;padding:14px 18px;border-left:3px solid var(--border2)}
+.av.av-up{border-left-color:var(--up)}.av.av-down{border-left-color:var(--down)}.av.av-warn{border-left-color:var(--warn)}
+.av-id{display:flex;align-items:center;gap:10px;min-width:0}.av-id .ic{width:36px;height:36px;border-radius:10px;display:grid;place-items:center;font-weight:800;font-size:11px;flex:none}
+.av-id small,.av-px small{display:block;font-size:11.5px;color:var(--muted)}
+.av-px b{font-size:17px;letter-spacing:-.3px;padding:1px 4px;border-radius:5px}
+.av-spark .spark{height:38px;margin:0}
+.av-pens p{font-size:12.5px;color:var(--muted);margin-top:5px}
+.av-ia{display:flex;gap:6px;color:#C8C1FF!important;font-size:12.5px}.av-ia svg.i{width:14px;height:14px;margin-top:2px}
+.av-m{text-align:center}.av-m small{font-weight:700;font-size:12.5px}
+.meter.sm{height:6px;margin:4px 0}.meter.sm i{width:11px;height:11px;border-width:2px}
+@media(max-width:1250px){.av{grid-template-columns:180px 110px 1fr 80px}.av-spark{display:none}}
+.flash-up{animation:fu 1.2s}.flash-down{animation:fd 1.2s}
+@keyframes fu{0%{background:rgba(34,197,94,.45);color:#fff}100%{background:transparent}}
+@keyframes fd{0%{background:rgba(244,63,94,.45);color:#fff}100%{background:transparent}}
+.est-mini{display:flex;flex-direction:column;gap:10px;min-height:150px;opacity:.82}.est-mini.on{opacity:1;border-color:rgba(34,197,94,.35)}
+.est-st{font-size:12.5px;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}.est-st .dot{display:inline-block;margin-right:6px;vertical-align:middle}
+.ico-s{width:32px;height:32px;border-radius:10px;display:grid;place-items:center;background:var(--brand-soft);color:#B7AEFF;flex:none}.ico-s svg.i{width:16px;height:16px}
+.ico-g{width:52px;height:52px;border-radius:15px;display:grid;place-items:center;background:var(--grad);color:#fff;flex:none;box-shadow:0 10px 26px -12px rgba(124,108,255,.9)}.ico-g svg.i{width:24px;height:24px}
+.tabs-est{display:flex;gap:6px;overflow-x:auto;padding-bottom:6px;margin-bottom:16px}
+.tab-est{display:flex;align-items:center;gap:8px;height:40px;padding:0 14px;border-radius:11px;border:1px solid var(--border2);background:var(--surface);color:var(--muted);font-weight:600;font-size:13px;cursor:pointer;white-space:nowrap;transition:.18s var(--ease)}
+.tab-est:hover{color:var(--text);border-color:#3A4E63;transform:translateY(-1px)}.tab-est.on{background:var(--brand-soft);border-color:var(--brand);color:#fff}
+.tab-est svg.i{width:16px;height:16px}.tab-est .dot{width:7px;height:7px}
+.est-hero{padding:22px}.est-hero.on{border-color:rgba(34,197,94,.35);background:linear-gradient(120deg,rgba(34,197,94,.06),var(--surface) 50%)}
+.est-status{margin-top:12px;padding:10px 14px;border-radius:10px;background:var(--bg2);border:1px solid var(--border);font-size:13px;display:flex;gap:9px;align-items:flex-start;line-height:1.5}
+.est-status .dot{margin-top:6px}
+.sw.lg{width:54px;height:30px}.sw.lg span::after{width:24px;height:24px}.sw.lg input:checked+span::after{transform:translateX(24px)}
+.passos{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;counter-reset:p}
+.passo{position:relative;background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:16px 16px 16px 54px;font-size:13.5px;color:#C9D3DF;transition:.2s}
+.passo:hover{border-color:var(--border2);transform:translateY(-2px)}
+.passo b{position:absolute;left:14px;top:14px;width:28px;height:28px;border-radius:9px;display:grid;place-items:center;background:var(--grad);color:#fff;font-size:13px}
+.escada{display:flex;flex-direction:column;gap:3px;max-height:400px;overflow:auto}
+.degrau{display:grid;grid-template-columns:110px 1fr 230px;align-items:center;gap:12px;padding:6px 10px;border-radius:8px;font-size:12.5px;background:var(--bg2)}
+.degrau i{height:2px;background:var(--border2);border-radius:2px}.degrau small{color:var(--faint)}
+.degrau.comprado{background:rgba(34,197,94,.1)}.degrau.comprado i{background:var(--up)}.degrau.comprado small{color:var(--up)}
+.preco-agora{padding:2px 10px}.preco-agora span{display:inline-flex;align-items:center;gap:4px;font-size:12px;font-weight:700;color:var(--brand2);background:rgba(34,211,238,.1);padding:3px 10px;border-radius:99px}
+.faixa{height:10px;border-radius:10px;background:linear-gradient(90deg,var(--down),var(--surface3) 50%,var(--up));position:relative}
+.faixa i{position:absolute;top:50%;width:16px;height:16px;border-radius:50%;background:#fff;border:3px solid var(--bg);transform:translate(-50%,-50%);transition:left .8s var(--ease)}
+.zc{width:100%;height:180px;display:block;background:var(--bg2);border-radius:12px}
+.leg{display:inline-flex;align-items:center;gap:6px;color:var(--muted)}.leg i{width:14px;height:3px;border-radius:2px;display:inline-block}
+.leg i.tri{width:0;height:0;border-left:6px solid transparent;border-right:6px solid transparent;border-top:8px solid var(--up);border-radius:0}
+.vbar{flex:1;height:6px;border-radius:6px;background:var(--surface3);position:relative;overflow:hidden}.vbar i{position:absolute;top:0;bottom:0}
+.chat{display:flex;flex-direction:column;min-height:560px}
+.msgs{flex:1;overflow:auto;display:flex;flex-direction:column;gap:12px;padding:4px 2px 14px;max-height:520px}
+.msg{max-width:86%;padding:12px 14px;border-radius:14px;font-size:13.5px;animation:in .3s}
+.msg b{font-size:11.5px;color:var(--muted);display:block;margin-bottom:3px}
+.msg.eu{align-self:flex-end;background:var(--brand-soft);border:1px solid rgba(124,108,255,.35)}
+.msg.ia{align-self:flex-start;background:var(--surface2);border:1px solid var(--border2)}
+.digitando{display:flex;gap:5px;padding:4px 0}.digitando i{width:7px;height:7px;border-radius:50%;background:var(--muted);animation:dg 1s infinite}
+.digitando i:nth-child(2){animation-delay:.15s}.digitando i:nth-child(3){animation-delay:.3s}
+@keyframes dg{50%{opacity:.25;transform:translateY(-3px)}}
+.ia-hero{padding:30px;background:radial-gradient(100% 140% at 0% 0%,rgba(124,108,255,.22),transparent 55%),radial-gradient(80% 120% at 100% 100%,rgba(34,211,238,.12),transparent 50%),var(--surface)}
+.relogio{display:flex;flex-direction:column;gap:12px}
+.sess{display:flex;align-items:center;gap:12px}
+.trilho{flex:1;height:12px;border-radius:12px;background:var(--bg2);border:1px solid var(--border);position:relative;overflow:hidden}
+.trilho i{position:absolute;top:0;bottom:0;opacity:.55;border-radius:12px}
+.trilho u{position:absolute;top:-2px;bottom:-2px;width:2px;background:#fff;box-shadow:0 0 8px #fff}
+.tour{position:fixed;inset:0;z-index:400}
+.tour-luz{position:fixed;border-radius:14px;box-shadow:0 0 0 9999px rgba(3,6,10,.78);transition:all .35s var(--ease);pointer-events:none;outline:2px solid var(--brand)}
+.tour-card{position:fixed;width:360px;background:var(--surface);border:1px solid var(--border2);border-radius:16px;padding:18px;box-shadow:0 30px 70px -20px #000;animation:pop .3s var(--ease)}
+
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 </style>
 </head>
@@ -248,6 +330,7 @@ input[type=checkbox].ck2:checked{background:var(--brand) url("data:image/svg+xml
       <div><h1 id="ttl">Painel</h1><div class="sub" id="sub"></div></div>
       <div class="grow"></div>
       <div id="hdrStatus" class="row"></div>
+      <button class="btn ghost" data-a="tour" data-tip="Tour rápido de 1 minuto"><svg class="i"><use href="#i-help"/></svg>Como funciona?</button>
       <button class="btn" id="btnRun" data-a="toggleRun"></button>
       <button class="btn danger" data-a="panic" data-tip="Fecha todas as posições e bloqueia novas entradas"><svg class="i"><use href="#i-alert"/></svg>Pânico</button>
     </header>
@@ -296,8 +379,29 @@ input[type=checkbox].ck2:checked{background:var(--brand) url("data:image/svg+xml
  <symbol id="i-chev" viewBox="0 0 24 24"><path d="m9 18 6-6-6-6"/></symbol>
  <symbol id="i-zap" viewBox="0 0 24 24"><path d="M4 14a1 1 0 0 1-.78-1.63l9.9-10.2a.5.5 0 0 1 .86.46l-1.92 6.02A1 1 0 0 0 13 10h7a1 1 0 0 1 .78 1.63l-9.9 10.2a.5.5 0 0 1-.86-.46l1.92-6.02A1 1 0 0 0 11 14z"/></symbol>
  <symbol id="i-users" viewBox="0 0 24 24"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></symbol>
+ <symbol id="i-eye" viewBox="0 0 24 24"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></symbol>
+ <symbol id="i-layers" viewBox="0 0 24 24"><path d="m12 2 10 5-10 5L2 7z"/><path d="m2 17 10 5 10-5M2 12l10 5 10-5"/></symbol>
+ <symbol id="i-chart" viewBox="0 0 24 24"><path d="M3 3v18h18"/><path d="M8 6v12M13 4v12M18 8v8"/><rect x="6.5" y="9" width="3" height="5" rx=".6"/><rect x="11.5" y="7" width="3" height="6" rx=".6"/><rect x="16.5" y="10" width="3" height="4" rx=".6"/></symbol>
+ <symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></symbol>
+ <symbol id="i-tool" viewBox="0 0 24 24"><path d="M14.7 6.3a4 4 0 0 0-5.4 5.4L3 18l3 3 6.3-6.3a4 4 0 0 0 5.4-5.4l-2.6 2.6-2.4-.6-.6-2.4z"/></symbol>
+ <symbol id="i-swap" viewBox="0 0 24 24"><path d="M7 7h13l-4-4M17 17H4l4 4"/></symbol>
+ <symbol id="i-triangle" viewBox="0 0 24 24"><path d="M12 4 3 19h18z"/><circle cx="12" cy="4" r="1.6"/><circle cx="3" cy="19" r="1.6"/><circle cx="21" cy="19" r="1.6"/></symbol>
+ <symbol id="i-percent" viewBox="0 0 24 24"><path d="M19 5 5 19"/><circle cx="6.5" cy="6.5" r="2.5"/><circle cx="17.5" cy="17.5" r="2.5"/></symbol>
+ <symbol id="i-grid" viewBox="0 0 24 24"><path d="M3 6h18M3 10h18M3 14h18M3 18h18"/><circle cx="8" cy="10" r="1.6" fill="currentColor"/><circle cx="16" cy="14" r="1.6" fill="currentColor"/></symbol>
+ <symbol id="i-calendar" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></symbol>
+ <symbol id="i-scale" viewBox="0 0 24 24"><path d="M12 3v18M7 21h10M5 7h14M5 7l-3 7a3 3 0 0 0 6 0zM19 7l-3 7a3 3 0 0 0 6 0z"/></symbol>
+ <symbol id="i-send" viewBox="0 0 24 24"><path d="m22 2-7 20-4-9-9-4z"/><path d="M22 2 11 13"/></symbol>
+ <symbol id="i-bell" viewBox="0 0 24 24"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></symbol>
+ <symbol id="i-calc" viewBox="0 0 24 24"><rect x="4" y="2" width="16" height="20" rx="2"/><path d="M8 6h8M8 10h.01M12 10h.01M16 10h.01M8 14h.01M12 14h.01M16 14h.01M8 18h.01M12 18h.01M16 18h.01"/></symbol>
+ <symbol id="i-globe" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15 15 0 0 1 0 20 15 15 0 0 1 0-20"/></symbol>
+ <symbol id="i-file" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6M8 13h8M8 17h5"/></symbol>
+ <symbol id="i-help" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M9.1 9a3 3 0 0 1 5.8 1c0 2-3 3-3 3M12 17h.01"/></symbol>
 </svg>
 
 <script src="app.js"></script>
+<script src="estrategias.js"></script>
+<script src="mercado.js"></script>
+<script src="mock.js"></script>
+<script src="mock2.js"></script>
 </body>
 </html>

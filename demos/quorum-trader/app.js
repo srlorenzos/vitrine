@@ -117,9 +117,11 @@ function abrirPasta(){ call("abrir_pasta_dados"); }
 function abrirSite(caminho){ call("abrir_link",(S.est?.site||"https://quorum-trader.netlify.app")+caminho); }
 function atualizarSlider(el){ const mn=+el.min,mx=+el.max; el.style.setProperty("--p",((el.value-mn)/(mx-mn)*100)+"%"); const l=$("#"+el.id+"V"); if(l) l.textContent=String(el.value).replace(".",",")+el.dataset.suf; }
 let ACOES = null;
-function acoes(){ return ACOES || (ACOES = {toggleRun,panic,go,destravar,fecharPos,cicloAgora,editarAtivo,toggleAtivo,testarAtivo,removerAtivo,addPreset,resetAprendizado,toggleAgente,comprar,
+const ACOES_EXTRA = {};
+function registrarAcoes(o){ Object.assign(ACOES_EXTRA, o); if(ACOES) Object.assign(ACOES, o); }
+function acoes(){ return ACOES || (ACOES = Object.assign({toggleRun,panic,go,destravar,fecharPos,cicloAgora,editarAtivo,toggleAtivo,testarAtivo,removerAtivo,addPreset,resetAprendizado,toggleAgente,comprar,
   filtrarNews,atualizarNews,abrir,ordHist,exportar,rodarBT,trocarModo,aplicarPerfil,salvarCampo,salvarCusto,salvarMT5,removerBN,salvarBN,salvarRSS,resetSim,abrirPasta,
-  onboarding,removerLic,ativarLic,abrirSite,addIndic,editIndic,copiarIndic,rmIndic}); }
+  onboarding,removerLic,ativarLic,abrirSite,addIndic,editIndic,copiarIndic,rmIndic,estrategiaLigar,abrirEstrategia}, ACOES_EXTRA)); }
 function despachar(el, tipo){
   const fn = acoes()[el.dataset[tipo]]; if(!fn) return;
   let args=[]; try{ args = el.dataset.p ? JSON.parse(el.dataset.p) : []; }catch{ return; }
@@ -143,17 +145,23 @@ setTimeout(()=>{ if(!API) usarDemo(); }, 4000);
 /* ============================================================ estado da UI */
 const S = {page:"painel", est:null, cfg:null, lastLog:0, logs:[], news:[], newsFiltro:"todas", hist:[], histOrd:["quando",-1], bt:null, btAtivo:null, busy:false};
 const PAGES = [
-  ["painel","Painel","home","Visão geral do robô em tempo real"],
-  ["ativos","Ativos","coins","O que o robô acompanha e opera"],
-  ["agentes","Agentes","bot","Quem vota em cada decisão e como estão aprendendo"],
+  ["painel","Painel ao vivo","home","O que o robô está fazendo agora, passo a passo"],
+  ["estrategias","Estratégias","layers","7 formas de ganho — cada uma em sua aba"],
+  ["graficos","Gráficos ao vivo","chart","Preço em tempo real com entradas, stops e alvos"],
+  ["copiloto","Copiloto IA","spark","Pergunte qualquer coisa sobre o seu robô"],
   ["noticias","Notícias","news","Manchetes em tempo real e o sentimento de cada uma"],
-  ["historico","Histórico","hist","Todos os trades fechados"],
-  ["backtest","Backtest","flask","Teste a estratégia no histórico antes de arriscar"],
   "sep",
-  ["config","Configurações","sliders","Risco, estratégia, conexões e notícias"],
+  ["historico","Histórico","hist","Todas as operações fechadas"],
+  ["backtest","Backtest","flask","Teste no histórico antes de arriscar"],
+  ["ferramentas","Ferramentas","tool","Calculadora, alertas, relógio de mercados, Telegram e relatório"],
+  "sep",
+  ["agentes","Agentes","bot","Quem vota em cada decisão e como estão aprendendo"],
+  ["ativos","Ativos","coins","O que o robô acompanha e opera"],
+  ["config","Configurações","sliders","Risco, estratégia, conexões e IA"],
   ["licenca","Licença","key","Seu plano e adicionais"],
   ["indique","Indique e ganhe","gift","Comissões por indicação"],
 ];
+const PG = {};       // páginas registradas por outros módulos: PG.nome = {render(full), tick(), carregar()}
 function renderNav(){
   setHTML($("#nav"), PAGES.map(p=>p==="sep"?`<div class="nav-sep"></div>`:
     `<div class="nav ${S.page===p[0]?"on":""}" tabindex="0" ${A("go",p[0])}>${ic(p[2])}<span>${p[1]}</span>${
@@ -163,9 +171,10 @@ async function go(p){
   S.page=p; const def=PAGES.find(x=>x[0]===p);
   $("#ttl").textContent=def[1]; $("#sub").textContent=def[3];
   renderNav(); $("#content").innerHTML=`<div class="page" id="pg"></div>`; $("#content").scrollTop=0;
-  if(["agentes","ativos","config","licenca","indique","backtest"].includes(p)) S.cfg = await call("config");
+  if(["agentes","ativos","config","licenca","indique","backtest","ferramentas","graficos"].includes(p)) S.cfg = await call("config");
   if(p==="noticias") S.news = await call("noticias");
   if(p==="historico") S.hist = await call("historico");
+  if(PG[p]?.carregar) await PG[p].carregar();
   render(true);
 }
 document.addEventListener("keydown",e=>{
@@ -175,6 +184,7 @@ document.addEventListener("keydown",e=>{
 });
 
 function render(full){
+  if(PG[S.page]) return full && PG[S.page].render(true);
   const f = {painel:pgPainel, ativos:pgAtivos, agentes:pgAgentes, noticias:pgNoticias, historico:pgHistorico,
              backtest:pgBacktest, config:pgConfig, licenca:pgLicenca, indique:pgIndique}[S.page];
   if(full || S.page==="painel") f && f(full);
@@ -194,7 +204,7 @@ function renderChrome(){
   setHTML($("#hdrStatus"),st);
   const L=e.licenca;
   setHTML($("#planCard"),`<div class="row"><div style="flex:1"><b>Plano ${esc(L.plano)}</b><span>${L.plano==="Demonstração"?"Desbloqueie o modo real":esc(L.email)}</span></div>${ic(L.plano==="Pro"?"spark":"key")}</div>`);
-  setHTML($("#ver"),`v${e.versao} · ${e.agentes_em_uso.length} agentes ativos · <span class="kbd">Ctrl</span>+<span class="kbd">1–9</span> navega`);
+  setHTML($("#ver"),`v${e.versao} · ${e.agentes_em_uso.length} agentes · ${(e.estrategias||[]).filter(x=>x.ativa).length} estratégias ligadas`);
   renderNav();
 }
 async function tick(){
@@ -209,6 +219,7 @@ async function tick_(){
     if(booted && ["compra","venda","ganho","perda","erro"].includes(l.nivel) && l._new!==false) toast(l.msg, l.nivel==="erro"||l.nivel==="perda"?"erro":l.nivel==="ganho"?"ok":"info"); }
   S.logs=S.logs.slice(0,200);
   renderChrome(); render(false);
+  if(PG[S.page]?.tick) await PG[S.page].tick();
 }
 async function boot(){
   const e = await call("estado",0); S.est=e; e.logs.forEach(l=>{S.logs.unshift(l); S.lastLog=Math.max(S.lastLog,l.id);});
@@ -216,6 +227,7 @@ async function boot(){
   renderChrome(); await go("painel"); booted=true;
   setInterval(tick, 1500);
   if(!e.onboarding_ok) onboarding();
+  else if(!lerLocal("tour_ok")) setTimeout(()=>tour(), 900);
 }
 async function toggleRun(){
   const b=$("#btnRun");
@@ -228,25 +240,92 @@ async function panic(){
   await call("panico"); toast("Tudo zerado. Entradas bloqueadas.","aviso"); tick();
 }
 
-/* ============================================================ PAINEL */
+/* ============================================================ PAINEL AO VIVO */
+const ETAPAS=[["noticias","news","Lendo notícias"],["coletando","chart","Baixando cotações"],["ia","spark","IA analisando"],["votando","bot","Agentes votando"],["aguardando","clock","Próxima análise"]];
+const PENS_COR={posicionado:"up",entrou:"up",saiu:"warn",bloqueado:"down",filtro:"warn",limite:"warn"};
+const fmtSeg = s => s==null ? "—" : s>=60 ? `${Math.floor(s/60)}:${String(Math.floor(s%60)).padStart(2,"0")}` : `${Math.ceil(s)}s`;
+function lerLocal(k){ try{ return localStorage.getItem("qt_"+k); }catch{ return null; } }
+function gravarLocal(k,v){ try{ localStorage.setItem("qt_"+k,v); }catch{} }
+function shells(cont, n, cls){
+  if(cont.children.length!==n){ cont.innerHTML=Array.from({length:n},()=>`<div class="${cls}"></div>`).join(""); }
+  return [...cont.children];
+}
+function heroHTML(e){
+  const rod=e.rodando, et=e.etapa||{}, idx=ETAPAS.findIndex(x=>x[0]===et.id), prox=e.proximo_ciclo;
+  const ligadas=(e.estrategias||[]).filter(x=>x.ativa), nAt=e.ativos.filter(a=>a.ativo!==false&&a.liberado).length;
+  const vivo = S.ultimoTick ? Math.max(0,Math.round((Date.now()-S.ultimoTick)/1000)) : null;
+  const texto = rod ? (et.id==="aguardando" ? `Análise concluída. Próxima em ${fmtSeg(prox)} — enquanto isso, acompanho os preços ao vivo e protejo as posições abertas.` : et.texto)
+                    : "Nada está sendo operado. Clique em Iniciar robô: ele começa a ler notícias, baixar cotações, ouvir os agentes e decidir.";
+  return `<div class="hv-top"><div class="hv-orb ${rod?"on":""}">${ic(rod?"bot":"pause")}</div>
+    <div style="flex:1;min-width:0"><div class="hv-k">${rod?"O robô está trabalhando":"O robô está parado"} <span class="badge ${e.modo==="real"?"warn":"brand"}">${e.modo==="real"?"MODO REAL":"Simulação"}</span></div>
+      <div class="hv-t">${esc(texto)}</div>
+      <div class="hv-sub"><span>${ic("eye")}${nAt} ativos monitorados</span><span>${ic("layers")}${ligadas.length} estratégia${ligadas.length===1?"":"s"} ligada${ligadas.length===1?"":"s"}${ligadas.length?": "+esc(ligadas.map(x=>x.nome.split(" (")[0]).join(", ")):""}</span>
+        <span class="${vivo!=null&&vivo<20?"up":""}"><span class="dot ${vivo!=null&&vivo<20?"pulse":""}"></span>Preços ao vivo${vivo!=null?` · atualizado há ${vivo}s`:""}</span></div></div>
+    <button class="btn lg ${rod?"":"go"}" ${A("toggleRun")} data-tour="start">${rod?ic("pause")+"Pausar":ic("play")+"Iniciar robô"}</button></div>
+  <div class="stepper ${rod?"":"off"}">${ETAPAS.map((s2,i)=>{
+      const semIA = s2[0]==="ia" && !e.ia?.disponivel;
+      return `<div class="st ${rod&&i<idx?"feito":""} ${rod&&i===idx?"atual":""} ${semIA?"sem":""}" ${semIA?`data-tip="IA disponível no plano Pro ou na assinatura IA Quorum"`:""}><div class="st-i">${ic(s2[1])}</div><span>${s2[2]}${semIA?" (Pro)":""}</span>${s2[0]==="aguardando"&&rod&&i===idx?`<small class="num">${fmtSeg(prox)}</small>`:""}</div>`;
+    }).join(`<div class="st-l"></div>`)}</div>`;
+}
+function linhaAtivo(a, e){
+  const [c,bg]=COR_ATIVO[a.mercado]||COR_ATIVO.forex;
+  if(!a.liberado) return `<div class="av-id"><div class="ic" style="background:${bg};color:${c}">${esc(sigla(a.nome))}</div><div><b>${esc(a.nome)}</b><small>Fora do limite do seu plano</small></div></div><div class="grow"></div><button class="btn sm" ${A("go","licenca")}>Ver planos</button>`;
+  const p=a.pensamento||{estado:"aguardando",titulo:e.rodando?"Analisando…":"Esperando você iniciar",texto:e.rodando?"O primeiro ciclo de análise está em andamento.":"Quando o robô estiver ligado, explico aqui o que estou pensando sobre este ativo."};
+  const cor=PENS_COR[p.estado]||"", serie=(a.ticks&&a.ticks.length>30)?a.ticks:a.spark, sc=a.score??0;
+  const ant=S.prevPreco[a.nome], fl = ant!=null && a.preco!=null && a.preco!==ant ? (a.preco>ant?"flash-up":"flash-down") : "";
+  S.prevPreco[a.nome]=a.preco;
+  return `<div class="av-id"><div class="ic" style="background:${bg};color:${c}">${esc(sigla(a.nome))}</div><div><b>${esc(a.nome)}</b><small>${MERC[a.mercado]} · ${esc(a.status||"")}</small></div></div>
+    <div class="av-px"><b class="num ${fl}">${price(a.preco)}</b><small class="num ${cls(a.variacao)}">${a.variacao!=null?pct(a.variacao,2)+" 24h":""}</small></div>
+    <div class="av-spark">${sparkSVG(serie,(serie&&serie.length>1)?serie[serie.length-1]>=serie[0]:true)}</div>
+    <div class="av-pens"><span class="badge ${cor}"><span class="dot ${e.rodando&&p.estado==="aguardando"?"pulse":""}"></span>${esc(p.titulo)}</span><p>${esc(p.texto)}</p>${p.ia?`<p class="av-ia">${ic("spark")}<span><b>IA:</b> ${esc(p.ia)}</span></p>`:""}</div>
+    <div class="av-m" data-tip="Consenso dos agentes: −100 (venda) a +100 (compra)"><div class="meter sm"><i style="left:${50+sc*50}%"></i></div><small class="num ${sc>.1?"up":sc<-.1?"down":""}">${a.score!=null?(sc*100>0?"+":"")+(sc*100).toFixed(0):"—"}</small></div>`;
+}
+function cardEstrategia(x){
+  return `<div class="row" style="gap:10px"><div class="ico-s">${ic(x.icone)}</div><b style="flex:1">${esc(x.nome)}</b>
+      <label class="sw" data-tip="${x.ativa?"Desligar":"Ligar"}"><input type="checkbox" ${x.ativa?"checked":""} ${CH("estrategiaLigar",x.id)}><span></span></label></div>
+    <p class="muted est-st"><span class="dot ${x.ativa&&S.est.rodando?"pulse":""}" style="color:${x.ativa?(x.erro?"var(--down)":"var(--up)"):"var(--faint)"}"></span>${esc(x.status)}</p>
+    <div class="row" style="margin-top:auto"><span class="muted" style="font-size:12px">${x.n_trades} operações</span><div class="grow"></div><b class="num ${cls(x.pnl)}">${signed(x.pnl)}</b>
+      <button class="btn sm ghost" ${A("abrirEstrategia",x.id)}>Abrir ${ic("chev")}</button></div>`;
+}
+async function estrategiaLigar(id,v){
+  const r=await call("estrategia_ligar",id,v); if(r.ok===false) return toast(r.erro,"erro");
+  toast(v?(S.est.rodando?"Estratégia ligada — já está trabalhando":"Estratégia ligada. Clique em Iniciar robô para ela começar"):"Estratégia desligada", v?"ok":"aviso"); tick();
+  if(PG.estrategias?.recarregar) PG.estrategias.recarregar();
+}
+function abrirEstrategia(id){ S.estTab=id; go("estrategias"); }
 function pgPainel(full){
   const e=S.est, pg=$("#pg"); if(!e||!pg) return;
-  if(full||!$("#pnK",pg)) pg.innerHTML=`<div id="pnBan"></div><div class="grid g4" id="pnK"></div>
+  if(!S.prevPreco) S.prevPreco={};
+  const tk=e.ativos.map(a=>a.ticks?.length?a.ticks[a.ticks.length-1]:null).join("|");
+  if(tk!==S._tk){ if(S._tk!==undefined) S.ultimoTick=Date.now(); S._tk=tk; }
+  if(full||!$("#pvHero",pg)) pg.innerHTML=`<div id="pnBan"></div>
+    <div class="card hero-vivo" id="pvHero" data-tour="status"></div>
+    <div class="row mt2 mb"><h3 class="sec">${ic("eye")}Agora, em cada ativo</h3><span class="muted" style="font-size:12.5px">o robô explica o que está pensando</span><div class="grow"></div><button class="btn sm" ${A("cicloAgora")} data-el>${ic("refresh")}Analisar agora</button></div>
+    <div class="col" id="pvAtivos" data-tour="ativos" style="gap:10px"></div>
+    <div class="row mt2 mb"><h3 class="sec">${ic("layers")}Estratégias</h3><span class="muted" style="font-size:12.5px">ligue quantas quiser — cada uma tem seu próprio capital</span><div class="grow"></div><button class="btn sm ghost" ${A("go","estrategias")}>Ver todas ${ic("chev")}</button></div>
+    <div class="grid g3" id="pvEst" data-tour="estrategias"></div>
+    <div class="row mt2 mb"><h3 class="sec">${ic("coins")}Resultado dos agentes</h3></div>
+    <div class="grid g4" id="pnK"></div>
     <div class="grid g-main mt"><div class="card"><div class="hd"><h3>${ic("trend")}Evolução do patrimônio</h3><div class="grow"></div><span class="muted" id="pnCurvaInfo" style="font-size:12px"></span></div><div class="chart-wrap" id="pnChart"></div></div>
     <div class="card col"><div class="hd" style="margin:0"><h3>${ic("zap")}Posições abertas</h3><div class="grow"></div><span id="pnPosN" class="badge"></span></div><div class="col" id="pnPos" style="gap:8px;overflow:auto;max-height:300px"></div></div></div>
-    <div class="row mt2 mb"><h3 style="font-size:15px">Ativos monitorados</h3><div class="grow"></div><span class="muted" style="font-size:12px">Passe o mouse para ver o voto de cada agente</span><button class="btn sm" ${A("cicloAgora")} data-el>${ic("refresh")}Analisar agora</button></div>
-    <div class="grid" id="pnA" style="grid-template-columns:repeat(auto-fill,minmax(250px,1fr))"></div>
-    <div class="card mt2"><div class="hd"><h3>${ic("hist")}Atividade</h3><div class="grow"></div><span class="muted" style="font-size:12px">Últimos eventos do robô</span></div><div id="pnLog" style="max-height:260px;overflow:auto"></div></div>`;
+    <div class="card mt2"><div class="hd"><h3>${ic("hist")}Diário do robô</h3><div class="grow"></div><span class="muted" style="font-size:12px">Tudo o que ele fez, em ordem</span></div><div id="pnLog" style="max-height:300px;overflow:auto"></div></div>`;
   let ban="";
-  if(e.travado) ban=`<div class="banner trava">${ic("alert")}<div style="flex:1"><b>Entradas bloqueadas</b> — ${e.motivo_trava==="perda"?"limite de perda diária atingido. Libera automaticamente amanhã.":"pânico acionado."}</div><button class="btn sm" ${A("destravar")}>Liberar entradas</button></div>`;
+  if(e.travado) ban=`<div class="banner trava">${ic("alert")}<div style="flex:1"><b>Entradas bloqueadas</b> — ${({perda:"limite de perda diária atingido. Libera automaticamente amanhã.",meta:"meta de lucro do dia atingida — lucro protegido até amanhã.",panico:"pânico acionado."})[e.motivo_trava]||""}</div><button class="btn sm" ${A("destravar")}>Liberar entradas</button></div>`;
   else if(e.modo==="real") ban=`<div class="banner real">${ic("zap")}<div><b>Modo real ativo.</b> O robô envia ordens de verdade para a corretora. Acompanhe e use o Pânico se precisar.</div></div>`;
-  else if(!e.rodando && !e.stats.trades) ban=`<div class="banner sim">${ic("info")}<div style="flex:1"><b>Tudo pronto.</b> Clique em <b>Iniciar robô</b> para começar no modo simulado — com dados reais de mercado e dinheiro fictício.</div><button class="btn sm go" ${A("toggleRun")}>${ic("play")}Iniciar</button></div>`;
   setHTML($("#pnBan"),ban);
+  setHTML($("#pvHero"),heroHTML(e));
+  const ativos=e.ativos.filter(a=>a.ativo!==false);
+  const rows=shells($("#pvAtivos"),ativos.length,"card av");
+  ativos.forEach((a,i)=>{ const p=a.pensamento||{}; rows[i].className="card av "+(PENS_COR[p.estado]?"av-"+PENS_COR[p.estado]:""); setHTML(rows[i],linhaAtivo(a,e)); });
+  if(!ativos.length) setHTML($("#pvAtivos"),`<div class="card empty">${ic("coins")}<div>Nenhum ativo ligado</div><button class="btn sm pri" ${A("go","ativos")}>Escolher ativos</button></div>`);
+  const ests=e.estrategias||[];
+  const cs=shells($("#pvEst"),ests.length,"card est-mini hov");
+  ests.forEach((x,i)=>{ cs[i].classList.toggle("on",x.ativa); setHTML(cs[i],cardEstrategia(x)); });
   const s=e.stats, real=e.modo==="real";
   setHTML($("#pnK"),[
     kpi(real?"Capital nas corretoras":"Patrimônio", money(e.patrimonio), real?Object.entries(e.capital_real).map(([k,v])=>k.toUpperCase()+": "+nf2.format(v)).join(" · ")||"conecte uma corretora":`Saldo ${money(e.saldo)} · aberto ${signed(e.nao_realizado)}`, "coins","rgba(124,108,255,.2)"),
     kpi("Resultado hoje", `<span class="${cls(e.pnl_dia)}">${signed(e.pnl_dia)}</span>`, "Realizado + em aberto", "trend", e.pnl_dia>=0?"rgba(34,197,94,.2)":"rgba(244,63,94,.2)"),
-    kpi("Taxa de acerto", s.trades?nf2.format(s.acerto).replace(",00","")+"%":"—", s.trades?`${s.trades} trades · expectativa ${signed(s.expectativa)}`:"Ainda sem trades fechados", "check","rgba(34,211,238,.18)",
+    kpi("Taxa de acerto", s.trades?nf2.format(s.acerto).replace(",00","")+"%":"—", s.trades?`${s.trades} operações · expectativa ${signed(s.expectativa)}`:"Ainda sem operações fechadas", "check","rgba(34,211,238,.18)",
         "Acerto sozinho engana: o que importa é a expectativa\n(ganho médio × acerto − perda média × erro)."),
     kpi("Fator de lucro", s.trades?String(s.fator_lucro).replace(".",","):"—", s.trades?`Drawdown máx. ${nf2.format(s.drawdown)}%`:"Lucro bruto ÷ prejuízo bruto", "shield","rgba(245,165,36,.18)",
         "Acima de 1 = estratégia lucrativa no período.\nDrawdown = maior queda desde um topo."),
@@ -258,11 +337,9 @@ function pgPainel(full){
       <div style="flex:1;min-width:0"><b>${esc(p.ativo)}</b>${p.real?' <span class="badge warn" style="height:18px">REAL</span>':""}<div class="muted num" style="font-size:12px">${price(p.entrada)} → ${price(p.preco)} · stop ${price(p.stop)}</div></div>
       <div style="text-align:right" class="num"><b class="${cls(p.pnl)}">${signed(p.pnl)}</b><div class="${cls(p.pct)}" style="font-size:12px">${pct(p.pct,2)}</div></div>
       <button class="btn sm icon ghost x" data-tip="Fechar agora" ${A("fecharPos",p.ativo)}>${ic("x")}</button></div>`).join("")
-    : `<div class="empty">${ic("zap")}<div>Nenhuma posição aberta</div><div class="faint" style="font-size:12px">O robô entra quando os agentes concordam o suficiente</div></div>`);
-  const ativos=e.ativos.filter(a=>a.ativo!==false);
-  setHTML($("#pnA"), ativos.map(assetCard).join("") || `<div class="card empty" style="grid-column:1/-1">${ic("coins")}<div>Nenhum ativo ligado</div><button class="btn sm pri" ${A("go","ativos")}>Escolher ativos</button></div>`);
-  setHTML($("#pnLog"), S.logs.length? S.logs.slice(0,80).map(l=>`<div class="log ${l.nivel}"><time>${hhmm(l.ts)}</time><span class="tag"></span><span>${esc(l.msg)}</span></div>`).join("")
-    : `<div class="empty">${ic("hist")}<div>Sem eventos ainda</div></div>`);
+    : `<div class="empty">${ic("zap")}<div>Nenhuma posição aberta</div><div class="faint" style="font-size:12px">Os agentes só entram quando o consenso passa do limite — veja acima o que falta em cada ativo</div></div>`);
+  setHTML($("#pnLog"), S.logs.length? S.logs.slice(0,100).map(l=>`<div class="log ${l.nivel}"><time>${hhmm(l.ts)}</time><span class="tag"></span><span>${esc(l.msg)}</span></div>`).join("")
+    : `<div class="empty">${ic("hist")}<div>Sem eventos ainda</div><div class="faint" style="font-size:12px">Inicie o robô: cada passo dele aparece aqui</div></div>`);
 }
 function kpi(lbl,val,foot,icon,glow,tip){
   return `<div class="card kpi hov" style="--glow:${glow}"><div class="lbl">${ic(icon)}${lbl}${tip?`<span data-tip="${esc(tip)}" class="faint" style="display:inline-flex">${ic("info")}</span>`:""}</div><div class="val num">${val}</div><div class="foot num">${foot}</div></div>`;
@@ -433,6 +510,13 @@ function pgConfig(){
     <div class="row wrap" style="gap:18px"><div class="seg"><button class="${e.modo_cfg==="simulado"?"on":""}" ${A("trocarModo","simulado")}>Simulado</button><button class="${e.modo_cfg==="real"?"on real":""}" ${A("trocarModo","real")}>${L.real?"":ic("lock")} Real</button></div>
     <div class="muted" style="flex:1;font-size:13px;min-width:280px">${e.modo==="real"?"<b class='warn'>Ordens reais estão sendo enviadas.</b> Volte ao simulado a qualquer momento.":"No simulado o robô usa dados reais de mercado com dinheiro fictício. Recomendamos algumas semanas aqui antes de ir para o real."}</div></div></div>
 
+  <div class="grid g2 mt"><div class="card"><div class="hd"><h3>${ic("bot")}Agentes e metas</h3></div><div class="col" style="gap:18px">
+    <div class="row"><div style="flex:1"><b>Estratégia de agentes ligada</b><div class="help">Desligada, o robô continua mostrando os sinais mas não abre posições com os agentes.</div></div><label class="sw"><input type="checkbox" ${C.agentes_direcional_ativo!==false?"checked":""} ${CH("salvarCampo","agentes_direcional_ativo")}><span></span></label></div>
+    ${slider("meta_lucro_dia_pct","Meta de lucro do dia (0 = sem meta)",C.meta_lucro_dia_pct||0,0,20,0.5,"%","Ao atingir, para de abrir posições até amanhã e protege o lucro.")}</div></div>
+  <div class="card"><div class="hd"><h3>${ic("spark")}Inteligência artificial</h3><div class="grow"></div><span class="badge ${e.ia?.na_licenca?"up":""}"><span class="dot"></span>${e.ia?.na_licenca?"Incluída na licença":"Não incluída"}</span></div><div class="col" style="gap:18px">
+    <div class="row"><div style="flex:1"><b>Agente IA (Claude) votando</b><div class="help">Lê manchetes e indicadores e dá um voto com justificativa. Roda no servidor do Quorum — nada para configurar.</div></div><label class="sw"><input type="checkbox" ${C.ia_ativa!==false?"checked":""} ${e.ia?.na_licenca?"":"disabled"} ${CH("salvarCampo","ia_ativa")}><span></span></label></div>
+    <div class="field"><label>Analisar a cada</label><select class="inp" ${CH("salvarCampo","ia_intervalo_min")} data-num ${e.ia?.na_licenca?"":"disabled"}>${[30,60,120,240].map(t=>`<option value="${t}" ${(C.ia_intervalo_min||60)==t?"selected":""}>${t<60?t+" minutos":t/60+" hora"+(t>60?"s":"")}</option>`).join("")}</select></div>
+    ${e.ia?.na_licenca?"":`<button class="btn sm pri" ${A("comprar","ia")}>${ic("unlock")}Conhecer a IA Quorum</button>`}</div></div></div>
   <div class="grid g2 mt"><div class="card"><div class="hd"><h3>${ic("shield")}Gestão de risco</h3></div>
       <div class="row mb" style="margin-top:-4px"><span class="muted" style="font-size:12.5px">Perfil rápido:</span><div class="chips">${Object.keys(PERFIS).map(k=>`<button class="chip" ${A("aplicarPerfil",k)}>${k[0].toUpperCase()+k.slice(1)}</button>`).join("")}</div></div>
     <div class="col" style="gap:20px">${slider("risco_por_trade_pct","Risco por operação",C.risco_por_trade_pct,.1,5,.1,"%","Quanto do capital você aceita perder se o stop for atingido.")}
@@ -494,7 +578,7 @@ async function salvarRSS(b){ const l=$("#rssT").value.split("\n").map(s=>s.trim(
 async function resetSim(b){ if(!await confirmar("Reiniciar simulação?","Saldo, posições e histórico simulados serão apagados.",{ok:"Reiniciar",perigo:true})) return; await withLoading(b,()=>call("resetar_simulacao",+$("#simS").value)); S.cfg=await call("config"); await tick(); toast("Simulação reiniciada","ok"); }
 
 /* ============================================================ LICENÇA */
-const PRECOS={essencial:"R$ 297",pro:"R$ 497",ag_momento:"R$ 59",ag_noticias:"R$ 79",ag_macd:"R$ 59",ag_bollinger:"R$ 59",ativos_ilimitados:"R$ 99"};
+const PRECOS={ia:"R$ 79/mês",essencial:"R$ 297",pro:"R$ 497",ag_momento:"R$ 59",ag_noticias:"R$ 79",ag_macd:"R$ 59",ag_bollinger:"R$ 59",ativos_ilimitados:"R$ 99"};
 function comprar(item){ call("abrir_link",(S.est?.site||"https://quorum-trader.netlify.app")+"/#planos"+(item?"?item="+item:"")); }
 function pgLicenca(){
   const L=S.est.licenca, AD=S.cfg.addons;
@@ -581,67 +665,3 @@ function onboarding(){
   draw();
 }
 
-/* ============================================================ MOCK (demonstração no navegador) */
-function MockAPI(){
-  const PRE=[{nome:"BTC/USDT",fonte:"binance",simbolo:"BTCUSDT",mercado:"cripto",palavras:["bitcoin"],p:96500},{nome:"ETH/USDT",fonte:"binance",simbolo:"ETHUSDT",mercado:"cripto",palavras:["ethereum"],p:3420},
-    {nome:"SOL/USDT",fonte:"binance",simbolo:"SOLUSDT",mercado:"cripto",palavras:["solana"],p:182},{nome:"BNB/USDT",fonte:"binance",simbolo:"BNBUSDT",mercado:"cripto",palavras:["bnb"],p:610},
-    {nome:"EUR/USD",fonte:"yahoo",simbolo:"EURUSD=X",mercado:"forex",palavras:["euro"],p:1.0842},{nome:"GBP/USD",fonte:"yahoo",simbolo:"GBPUSD=X",mercado:"forex",palavras:["libra"],p:1.2712},
-    {nome:"USD/JPY",fonte:"yahoo",simbolo:"JPY=X",mercado:"forex",palavras:["iene"],p:149.3},{nome:"Ouro (XAU)",fonte:"yahoo",simbolo:"GC=F",mercado:"forex",palavras:["ouro"],p:2650},
-    {nome:"Mini Índice (WIN)",fonte:"mt5",simbolo:"WIN$N",reserva:"^BVSP",mercado:"b3",palavras:["ibovespa"],p:131250},{nome:"Mini Dólar (WDO)",fonte:"mt5",simbolo:"WDO$N",reserva:"BRL=X",mercado:"b3",palavras:["dólar"],p:5.412}];
-  const AG={tendencia:["Tendência","trend","Cruza médias móveis exponenciais (9 e 21) e segue a direção dominante do preço."],reversao:["Reversão","rewind","Usa o RSI para identificar exageros de compra/venda e aposta na volta ao equilíbrio."],
-    rompimento:["Rompimento","bolt","Entra quando o preço rompe a máxima ou a mínima das últimas 20 barras."],momento:["Momento","rocket","Mede a força do movimento recente, ajustada pela volatilidade do ativo."],
-    noticias:["Notícias","news","Lê feeds RSS em tempo real e pontua o sentimento das manchetes ligadas a cada ativo."],macd:["MACD","wave","Histograma do MACD para captar aceleração e perda de força da tendência."],bollinger:["Bollinger","bands","Mede quantos desvios o preço está da média de 20 barras e opera o retorno."]};
-  const ADD={ag_momento:"Agente Momento",ag_noticias:"Agente Notícias (RSS)",ag_macd:"Agente MACD",ag_bollinger:"Agente Bollinger",ativos_ilimitados:"Ativos ilimitados"};
-  let lic={plano:"Demonstração",real:false,max_ativos:3,agentes:["tendencia","reversao","rompimento"],addons:[],email:"",nome:"",id:"",expira:null};
-  const cfg={onboarding_ok:true,modo:"simulado",saldo_inicial_simulado:10000,intervalo_ciclo_seg:120,timeframe_min:60,risco_por_trade_pct:1,perda_max_dia_pct:3,max_posicoes:4,limiar_entrada:.5,stop_atr:2.5,alvo_rr:2.5,trailing:true,custos:{cripto:.1,forex:.005,b3:.008},filtro_tendencia:true,fechar_fim_pregao:true,
-    agentes_ativos:Object.keys(AG),ativos:[PRE[0],PRE[4],PRE[8]].map(p=>({...p,ativo:true,lote_max:1})),rss:["https://www.infomoney.com.br/feed/","https://cointelegraph.com/rss","https://www.fxstreet.com/rss/news"],
-    mt5:{login:0,senha:"",servidor:"XPMT5-PRD",caminho_terminal:""},binance:{api_key:"",api_secret:""},indicacoes:[{nome:"Binance",link:""},{nome:"XP Investimentos",link:""}],licenca:false};
-  const now=()=>Date.now()/1000; let id=0; const logs=[]; const L=(msg,nivel="info")=>logs.push({id:++id,ts:now(),nivel,msg});
-  const px={}, spark={}; PRE.forEach(p=>{px[p.nome]=p.p; spark[p.nome]=Array.from({length:60},(_,i)=>p.p*(1+Math.sin(i/7+p.p)*.004+(Math.random()-.5)*.003));});
-  const pesos={}, acertos={}; cfg.ativos.forEach(a=>{pesos[a.nome]={}; acertos[a.nome]={}; Object.keys(AG).forEach(k=>{pesos[a.nome][k]=+(0.6+Math.random()*1.6).toFixed(2); acertos[a.nome][k]=[30+Math.floor(Math.random()*25),80];});});
-  let saldo=10000, rodando=true, travado=false, prox=now()+20; const posicoes={}, fechados=[], curva=[];
-  let v=10000; for(let i=300;i>0;i--){ v+= (Math.random()-.5)*28; curva.push([Math.floor(now()-i*600), +v.toFixed(2)]); } saldo=v;
-  [["BTC/USDT",1,"alvo",64.2],["EUR/USD",-1,"stop",-31.5],["Mini Índice (WIN)",1,"sinal contrário",22.8],["ETH/USDT",-1,"alvo",58.1],["BTC/USDT",1,"stop",-34.7],["EUR/USD",1,"alvo",61.3]].forEach(([a,l,m,p],i)=>
-    fechados.push({ativo:a,lado:l,entrada:px[a],saida:px[a]*(1+p/10000*l),qtd:1,pnl:p,pct:p/100,motivo:m,aberto:new Date((now()-(i+2)*5400)*1000).toISOString(),quando:new Date((now()-(i+1)*5000)*1000).toISOString(),real:false}));
-  posicoes["BTC/USDT"]={lado:1,entrada:px["BTC/USDT"]*0.997,qtd:.05,ts:now()-1800,stop:px["BTC/USDT"]*0.988,alvo:px["BTC/USDT"]*1.015,real:false};
-  L("Robô iniciado em modo SIMULADO","ok"); L("38 notícias novas analisadas","news"); L("COMPRA BTC/USDT a 96.210 · stop 95.350 · alvo 97.930","compra");
-  const ultimo={};
-  function passo(){
-    cfg.ativos.forEach(a=>{ const vol=a.mercado==="cripto"?.0025:a.mercado==="b3"?.0012:.0006; px[a.nome]*=1+(Math.random()-.5)*vol; spark[a.nome].push(px[a.nome]); spark[a.nome]=spark[a.nome].slice(-60);
-      const votos={}; Object.keys(AG).filter(k=>lic.agentes.includes(k)).forEach(k=>votos[k]=+((Math.random()-.5)*1.6).toFixed(2));
-      const sc=Object.values(votos).reduce((s,x)=>s+x,0)/Math.max(1,Object.keys(votos).length);
-      ultimo[a.nome]={preco:px[a.nome],score:+sc.toFixed(3),votos,variacao:(px[a.nome]/spark[a.nome][0]-1)*100,origem:a.fonte==="mt5"?"Yahoo (reserva)":({binance:"Binance",yahoo:"Yahoo"})[a.fonte]}; });
-    const pat=saldo+unreal(); curva.push([Math.floor(now()),+pat.toFixed(2)]);
-    if(Math.random()<.35){ const a=cfg.ativos[Math.floor(Math.random()*cfg.ativos.length)].nome; if(posicoes[a]){ const p=posicoes[a]; const pnl=(px[a]-p.entrada)*p.qtd*p.lado; saldo+=pnl; delete posicoes[a];
-        fechados.unshift({ativo:a,lado:p.lado,entrada:p.entrada,saida:px[a],qtd:p.qtd,pnl,pct:(px[a]/p.entrada-1)*100*p.lado,motivo:pnl>0?"alvo":"stop",aberto:new Date(p.ts*1000).toISOString(),quando:new Date().toISOString(),real:false}); L(`Fechou ${a} (${pnl>0?"alvo":"stop"}) · resultado ${pnl>=0?"+":""}${pnl.toFixed(2)}`,pnl>0?"ganho":"perda"); }
-      else if(Object.keys(posicoes).length<cfg.max_posicoes && !travado){ const l=Math.random()>.5?1:-1; posicoes[a]={lado:l,entrada:px[a],qtd:100/(px[a]*.006),ts:now(),stop:px[a]*(1-.006*l),alvo:px[a]*(1+.012*l),real:false}; L(`${l>0?"COMPRA":"VENDA"} ${a} a ${px[a].toFixed(2)}`,l>0?"compra":"venda"); } }
-    prox=now()+20;
-  }
-  const unreal=()=>Object.entries(posicoes).reduce((s,[n,p])=>s+(px[n]-p.entrada)*p.qtd*p.lado,0);
-  passo(); setInterval(()=>{ if(rodando) passo(); },20000);
-  const stats=()=>{ const p=fechados.map(t=>t.pnl), g=p.filter(x=>x>0), q=p.filter(x=>x<=0), sum=a=>a.reduce((s,x)=>s+x,0);
-    return {trades:p.length,acerto:p.length?g.length/p.length*100:0,expectativa:p.length?sum(p)/p.length:0,fator_lucro:q.length?+(sum(g)/-sum(q)).toFixed(2):0,drawdown:3.4,pnl_total:sum(p),ganho_medio:g.length?sum(g)/g.length:0,perda_media:q.length?sum(q)/q.length:0,melhor:Math.max(0,...p),pior:Math.min(0,...p)}; };
-  const ok=x=>Promise.resolve({ok:true,...x}), no=m=>Promise.resolve({ok:false,erro:m});
-  const pos=(n,p)=>({ativo:n,lado:p.lado,entrada:p.entrada,preco:px[n],stop:p.stop,alvo:p.alvo,qtd:p.qtd,real:false,desde:p.ts,pnl:(px[n]-p.entrada)*p.qtd*p.lado,pct:(px[n]/p.entrada-1)*100*p.lado});
-  const N=["Bitcoin sobe após entrada recorde em ETFs","Ibovespa recua com cautela antes do Copom","Euro avança com dados fortes da zona do euro","Ethereum cai com venda de baleias","Fed sinaliza corte de juros em dezembro","Dólar recua frente ao real com fluxo estrangeiro","Ouro bate recorde com busca por proteção","Mercado cripto tem semana de alta"];
-  return {
-    estado:(d)=>Promise.resolve({app:"Quorum Trader",versao:"1.0.0",site:location.origin.includes("quorum-trader")?location.origin:"https://quorum-trader.netlify.app",rodando,travado,motivo_trava:travado?"panico":"",modo:"simulado",modo_cfg:cfg.modo,patrimonio:saldo+unreal(),saldo,pnl_dia:unreal()+42.3,nao_realizado:unreal(),capital_real:{},
-      proximo_ciclo:rodando?Math.max(0,prox-now()):null,ultimo_ciclo:now(),stats:stats(),
-      ativos:cfg.ativos.map((a,i)=>({...a,liberado:i<lic.max_ativos,...(ultimo[a.nome]||{}),spark:spark[a.nome],aberto:a.mercado!=="b3"||true,status:"Aberto",posicao:posicoes[a.nome]?pos(a.nome,posicoes[a.nome]):null})),
-      posicoes:Object.entries(posicoes).map(([n,p])=>pos(n,p)),curva:curva.slice(-500),logs:logs.filter(l=>l.id>d),mt5:{ok:false,info:""},binance_ok:false,licenca:lic,onboarding_ok:cfg.onboarding_ok,agentes_em_uso:lic.agentes,n_noticias:N.length}),
-    config:()=>Promise.resolve({config:structuredClone(cfg),presets:PRE,addons:ADD,agentes:Object.entries(AG).map(([k,v])=>({id:k,nome:v[0],icone:v[1],desc:v[2],liberado:lic.agentes.includes(k),ligado:cfg.agentes_ativos.includes(k),addon:["tendencia","reversao","rompimento"].includes(k)?null:"ag_"+k})),pesos,acertos}),
-    noticias:()=>Promise.resolve(N.map((t,i)=>({ts:now()-i*1500,titulo:t,link:"",fonte:["infomoney.com.br","cointelegraph.com","fxstreet.com"][i%3],score:/sobe|avança|corte|recorde|alta|recua frente/.test(t)?.5:/cai|recua/.test(t)?-.5:0,ativos:[cfg.ativos[i%cfg.ativos.length].nome]}))),
-    historico:()=>Promise.resolve(fechados.slice()),
-    iniciar:()=>{rodando=true;L("Robô iniciado em modo SIMULADO","ok");return ok();}, pausar:()=>{rodando=false;L("Robô pausado","aviso");return ok();},
-    ciclo_agora:()=>{passo();return ok();}, panico:()=>{Object.keys(posicoes).forEach(k=>delete posicoes[k]);travado=true;L("PÂNICO acionado: posições zeradas e novas entradas bloqueadas.","erro");return ok();},
-    destravar:()=>{travado=false;return ok();}, fechar_posicao:(n)=>{delete posicoes[n];L("Fechou "+n+" (manual)","info");return ok();},
-    salvar_config:(d)=>{Object.assign(cfg,d);return ok();}, definir_modo:()=>no("Na demonstração o modo real fica bloqueado."),
-    salvar_mt5:()=>no("Disponível no aplicativo para Windows."), salvar_binance:()=>no("Disponível no aplicativo para Windows."), remover_binance:()=>ok(),
-    resetar_simulacao:()=>{saldo=10000;fechados.length=0;curva.length=0;return ok();}, resetar_aprendizado:()=>ok(),
-    ativar_licenca:()=>no("Ative sua chave no aplicativo para Windows."), remover_licenca:()=>ok(),
-    backtest:(n)=>new Promise(r=>setTimeout(()=>{ let s=10000; const c=[]; for(let i=0;i<400;i++){ s+=(Math.random()-.5)*40; c.push([Math.floor(now()-(400-i)*900),+s.toFixed(2)]); }
-      r({ok:true,resultado:{trades:64,acerto:46.9,expectativa:(s-10000)/64,fator_lucro:1.31,drawdown:6.2,pnl_total:s-10000,ganho_medio:88,perda_media:-58,melhor:240,pior:-110,curva:c,origem:"Binance",barras:1000,inicio:c[0][0],fim:c[399][0],pesos:{tendencia:1.8,reversao:.7,rompimento:1.2},retorno_pct:(s/10000-1)*100,buy_hold_pct:4.1,agentes:["tendencia","reversao","rompimento"]}})},1600)),
-    testar_ativo:()=>ok({preco:1.0842,origem:"Yahoo",barras:200}), atualizar_noticias:()=>ok({novos:3}), exportar_csv:()=>no("Disponível no aplicativo para Windows."),
-    abrir_link:(u)=>{window.open(u,"_blank","noopener");return ok();}, abrir_pasta_dados:()=>ok(),
-  };
-}
