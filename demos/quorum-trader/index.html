@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Demo do Quorum Trader: o aplicativo desktop de trade rodando no navegador com dados simulados.">
+  <title>Quorum Trader · Demo</title>
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="../../assets/demo-barra.css">
+  <style>
+    html, body { margin: 0; height: 100%; background: #0A0E13; }
+    body { display: flex; flex-direction: column; }
+    .palco { flex: 1; position: relative; overflow: hidden; }
+    .palco iframe { position: absolute; top: 0; left: 0; border: 0; transform-origin: 0 0; }
+    .aviso-tela { display: none; color: #8A9AAE; font: 14px/1.5 system-ui, sans-serif; padding: 10px 16px; background: #111821; border-bottom: 1px solid #1F2B38; }
+    @media (max-width: 900px) { .aviso-tela { display: block; } }
+  </style>
+</head>
+<body>
+  <nav class="demo-barra" aria-label="Navegação da demonstração">
+    <a class="demo-voltar" href="../../">&larr; Voltar para a vitrine</a>
+    <strong class="demo-nome">quorum-trader</strong>
+    <a class="demo-codigo" href="https://quorum-trader.netlify.app" target="_blank" rel="noopener">Site oficial</a>
+    <span class="demo-selo">Demonstração: mercado simulado no navegador</span>
+  </nav>
+  <div class="aviso-tela">Este é um app de desktop — a demo foi reduzida para caber na sua tela.</div>
+  <div class="palco" id="palco"><iframe src="app.html" title="Quorum Trader — demonstração"></iframe></div>
+  <script src="palco.js"></script>
+</body>
+</html>

@@ -59,4 +59,12 @@ export const previews = {
       <div class="pv-maq"><u class="mal"></u>${linha(38)}<em>alerta</em></div>
       <div class="pv-maq"><u class="ok"></u>${linha(52)}<em>CPU 8%</em></div>
     </div>`,
+  quorum: `
+    <div class="pv pv-quorum">
+      <svg viewBox="0 0 224 70" class="pv-q-graf"><defs><linearGradient id="pvq" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#22c55e" stop-opacity=".35"/><stop offset="1" stop-color="#22c55e" stop-opacity="0"/></linearGradient></defs>
+        <path d="M0 58 L18 52 L34 55 L52 44 L70 47 L88 36 L106 39 L124 28 L142 32 L160 20 L178 24 L196 12 L224 8 L224 70 L0 70Z" fill="url(#pvq)"/>
+        <path d="M0 58 L18 52 L34 55 L52 44 L70 47 L88 36 L106 39 L124 28 L142 32 L160 20 L178 24 L196 12 L224 8" fill="none" stroke="#22c55e" stroke-width="2"/></svg>
+      <div class="pv-q-linha"><b>BTC</b><span class="pv-q-medidor"><i style="left:72%"></i></span><em class="c">compra</em></div>
+      <div class="pv-q-linha"><b>WIN</b><span class="pv-q-medidor"><i style="left:30%"></i></span><em class="v">venda</em></div>
+    </div>`,
 };

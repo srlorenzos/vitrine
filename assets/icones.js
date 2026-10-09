@@ -9,6 +9,8 @@ export const icones = {
   palavreco: svg('<rect x="3" y="3" width="8" height="8" rx="2"/><rect x="13" y="3" width="8" height="8" rx="2"/><rect x="3" y="13" width="8" height="8" rx="2"/><path d="M14.5 17l2 2 4-4.2"/>'),
   gtd: svg('<rect x="2.5" y="4" width="19" height="16" rx="3"/><path d="M6.5 9.5l3 2.5-3 2.5M12 15h5"/>'),
   farol: svg('<path d="M9.5 21l1.2-12h2.6l1.2 12z"/><path d="M10.4 12.5h3.2M10.1 16.5h3.8"/><path d="M10.7 9l.5-3h1.6l.5 3"/><path d="M6 4.5L3 3.5M18 4.5l3-1M6 7.5H3M18 7.5h3"/><path d="M8 21h8"/>'),
+  quorum: svg('<circle cx="11" cy="11" r="6.5"/><path d="M15.8 15.8L20.5 20.5"/><circle cx="11" cy="11" r="1.6"/><path d="M7.5 12.5l2-2 1.5 1.5 2.5-3"/>'),
+  site: svg('<circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.5 2.7 3.8 5.7 3.8 9s-1.3 6.3-3.8 9c-2.5-2.7-3.8-5.7-3.8-9S9.5 5.7 12 3z"/>'),
   codigo: svg('<path d="M8.5 7L3.5 12l5 5M15.5 7l5 5-5 5"/>'),
   play: svg('<path d="M7 4.5v15l12-7.5z" fill="currentColor"/>'),
   sol: svg('<circle cx="12" cy="12" r="4"/><path d="M12 2.5v2M12 19.5v2M2.5 12h2M19.5 12h2M5.3 5.3l1.4 1.4M17.3 17.3l1.4 1.4M5.3 18.7l1.4-1.4M17.3 6.7l1.4-1.4"/>'),

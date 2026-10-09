@@ -161,4 +161,13 @@ h1.nome span { background: linear-gradient(100deg, var(--destaque), var(--destaq
 .pv-maq u.mal { background: var(--perigo); box-shadow: 0 0 8px var(--perigo); }
 .pv-maq .pv-linha { flex: 0 0 auto; width: calc(var(--w) * 1.1px); }
 
+.pv-quorum { display: grid; gap: 7px; }
+.pv-q-graf { width: 100%; height: 62px; display: block; background: var(--superficie); border: 1px solid var(--borda); border-radius: 8px; }
+.pv-q-linha { display: flex; align-items: center; gap: 8px; background: var(--superficie); border: 1px solid var(--borda); border-radius: 8px; padding: 6px 10px; font-family: var(--mono); font-size: 10px; }
+.pv-q-linha b { width: 26px; }
+.pv-q-medidor { position: relative; flex: 1; height: 5px; border-radius: 5px; background: linear-gradient(90deg, #f43f5e, #2a3346 50%, #22c55e); }
+.pv-q-medidor i { position: absolute; top: 50%; width: 9px; height: 9px; border-radius: 50%; background: #fff; transform: translate(-50%, -50%); }
+.pv-q-linha em { font-style: normal; width: 40px; text-align: right; }
+.pv-q-linha .c { color: #22c55e; } .pv-q-linha .v { color: #f43f5e; }
+
 @media (max-width: 420px) { .acoes .btn { flex: 1; } }

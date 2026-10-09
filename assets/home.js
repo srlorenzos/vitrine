@@ -52,7 +52,8 @@ function criarCard(p) {
       <ul class="tags" aria-label="Tecnologias">${p.tags.map((t) => `<li>${esc(t)}</li>`).join('')}</ul>
       <div class="acoes">
         ${demo}
-        <a class="btn" href="${esc(p.codigo)}" target="_blank" rel="noopener">${icones.codigo} Código<span class="so-leitor"> de ${esc(p.nome)} no GitHub</span></a>
+        ${p.codigo ? `<a class="btn" href="${esc(p.codigo)}" target="_blank" rel="noopener">${icones.codigo} Código<span class="so-leitor"> de ${esc(p.nome)} no GitHub</span></a>` : ''}
+        ${p.site ? `<a class="btn" href="${esc(p.site)}" target="_blank" rel="noopener">${icones.site} Site<span class="so-leitor"> oficial de ${esc(p.nome)}</span></a>` : ''}
       </div>
     </div>`;
   el.addEventListener('pointermove', (e) => {

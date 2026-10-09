@@ -14,6 +14,20 @@ export const linguagens = ['JavaScript', 'Python', 'Java'];
 
 export const projetos = [
   {
+    id: 'quorum-trader',
+    nome: 'quorum-trader',
+    descricao: 'Robô de trade para Windows: agentes que votam, aprendem de hora em hora e leem notícias via RSS. Mini índice (MT5/XP), forex e cripto, com modo simulado, backtest e travas de risco.',
+    categorias: ['financas'],
+    linguagens: ['Python', 'JavaScript'],
+    tags: ['Python', 'pywebview', 'MetaTrader 5', 'Netlify Functions', 'Ed25519'],
+    icone: 'quorum',
+    preview: 'quorum',
+    status: 'pronto',
+    demo: 'demos/quorum-trader/',
+    codigo: null,
+    site: 'https://quorum-trader.netlify.app',
+  },
+  {
     id: 'resumo-do-dia',
     nome: 'resumo-do-dia',
     descricao: 'Todo dia útil às 7h, um e-mail com a agenda do Google, as tarefas do TickTick e as contas do Organizze. Roda sozinho no GitHub Actions.',
