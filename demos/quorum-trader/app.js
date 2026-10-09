@@ -432,6 +432,7 @@ function pgConfig(){
     <div class="col" style="gap:20px">${slider("risco_por_trade_pct","Risco por operação",C.risco_por_trade_pct,.1,5,.1,"%","Quanto do capital você aceita perder se o stop for atingido.")}
     ${slider("perda_max_dia_pct","Perda máxima por dia",C.perda_max_dia_pct,.5,20,.5,"%","Ao atingir, o robô para de abrir posições até o dia seguinte.")}
     ${slider("max_posicoes","Posições simultâneas",C.max_posicoes,1,20,1,"","")}
+    <div class="row"><div style="flex:1"><b>Retomar sozinho ao abrir o app</b><div class="help">Se o PC reiniciar, o robô volta a operar assim que o app abrir (se estava ligado).</div></div><label class="sw"><input type="checkbox" ${C.iniciar_automatico?"checked":""} ${CH("salvarCampo","iniciar_automatico")}><span></span></label></div>
     <div class="row"><div style="flex:1"><b>Fechar no fim do pregão (B3)</b><div class="help">Zera mini índice/dólar às 18h15 — evita carregar de um dia pro outro.</div></div><label class="sw"><input type="checkbox" ${C.fechar_fim_pregao?"checked":""} ${CH("salvarCampo","fechar_fim_pregao")}><span></span></label></div></div></div>
 
   <div class="card"><div class="hd"><h3>${ic("sliders")}Estratégia</h3></div><div class="col" style="gap:20px">
