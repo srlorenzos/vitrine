@@ -1,0 +1,116 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>resumo-do-dia · Demo</title>
+  <meta name="description" content="Demonstração do resumo-do-dia: o e-mail diário com agenda, tarefas e contas a pagar, dentro de um cliente de e-mail.">
+  <link rel="icon" href="../../assets/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="../../assets/base.css">
+  <link rel="stylesheet" href="../../assets/demo-barra.css">
+  <script src="../../assets/tema.js"></script>
+  <style>
+    body { min-height: 100vh; display: flex; flex-direction: column; }
+    .app { flex: 1; width: min(1180px, 100% - 24px); margin: 22px auto 40px; }
+    .intro { margin: 0 0 16px; color: var(--texto-2); max-width: 70ch; }
+    .intro b { color: var(--texto); }
+    .janela { background: var(--superficie); border: 1px solid var(--borda); border-radius: 16px; overflow: hidden; box-shadow: var(--sombra); }
+    .janela-barra { display: flex; align-items: center; gap: 8px; padding: 10px 14px; background: var(--superficie-2); border-bottom: 1px solid var(--borda); }
+    .janela-barra i { width: 11px; height: 11px; border-radius: 50%; background: var(--borda); }
+    .janela-barra i:nth-child(1) { background: #ff6b6b; } .janela-barra i:nth-child(2) { background: #ffc46b; } .janela-barra i:nth-child(3) { background: #4fd1c5; }
+    .janela-barra span { margin-left: 8px; font-size: .82rem; color: var(--texto-2); }
+    .cliente { display: grid; grid-template-columns: 300px 1fr; min-height: 640px; }
+    .lista { border-right: 1px solid var(--borda); background: var(--superficie); overflow: hidden; }
+    .lista h2 { margin: 0; padding: 14px 16px 10px; font-size: .78rem; letter-spacing: .08em; text-transform: uppercase; color: var(--texto-2); }
+    .item { display: block; width: 100%; text-align: left; background: none; border: 0; border-bottom: 1px solid var(--borda); padding: 12px 16px; cursor: default; color: var(--texto-2); }
+    .item .l1 { display: flex; justify-content: space-between; gap: 8px; font-size: .88rem; color: var(--texto); font-weight: 600; }
+    .item .l1 time { font-weight: 400; font-size: .75rem; color: var(--texto-2); flex: none; }
+    .item .l2 { font-size: .85rem; margin-top: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; color: var(--texto); }
+    .item .l3 { font-size: .8rem; margin-top: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .item.sel { background: color-mix(in srgb, var(--destaque) 14%, var(--superficie)); box-shadow: inset 3px 0 0 var(--destaque); cursor: default; }
+    .item.nao-lido .l1 { font-weight: 750; }
+    .leitura { display: flex; flex-direction: column; background: var(--superficie-2); min-width: 0; }
+    .cabecalho { padding: 18px 22px 14px; background: var(--superficie); border-bottom: 1px solid var(--borda); }
+    .cabecalho h1 { font-size: 1.2rem; margin: 0 0 12px; letter-spacing: -.01em; }
+    .meta { display: grid; grid-template-columns: auto 1fr; gap: 3px 12px; margin: 0; font-size: .86rem; }
+    .meta dt { color: var(--texto-2); }
+    .meta dd { margin: 0; min-width: 0; overflow-wrap: anywhere; }
+    .avatar { display: inline-grid; place-items: center; width: 22px; height: 22px; border-radius: 50%; background: linear-gradient(135deg, var(--destaque), var(--destaque-2)); color: #0a0d16; font-size: .7rem; font-weight: 800; vertical-align: middle; margin-right: 6px; }
+    .ferramentas { display: flex; align-items: center; gap: 10px; padding: 10px 22px; border-bottom: 1px solid var(--borda); background: var(--superficie); flex-wrap: wrap; }
+    .ferramentas .rot { font-size: .82rem; color: var(--texto-2); margin-right: auto; }
+    .alterna { display: inline-flex; padding: 3px; border-radius: 999px; background: var(--superficie-2); border: 1px solid var(--borda); }
+    .alterna button { border: 0; background: transparent; padding: 6px 14px; border-radius: 999px; cursor: pointer; font-size: .85rem; font-weight: 600; color: var(--texto-2); }
+    .alterna button[aria-pressed="true"] { background: var(--destaque); color: #0a0d16; }
+    .corpo { padding: 22px; overflow: auto; flex: 1; display: flex; justify-content: center; align-items: flex-start; background: repeating-linear-gradient(45deg, var(--superficie-2), var(--superficie-2) 12px, color-mix(in srgb, var(--superficie-2) 92%, var(--texto)) 12px, color-mix(in srgb, var(--superficie-2) 92%, var(--texto)) 24px); }
+    .moldura { width: 100%; max-width: 100%; transition: width .45s cubic-bezier(.2,.7,.2,1); background: #f3f4f6; border-radius: 10px; overflow: hidden; box-shadow: 0 12px 40px -12px rgb(0 0 0 / .5); }
+    .moldura.celular { width: 390px; border-radius: 28px; border: 8px solid #222836; background: #f3f4f6; }
+    .moldura iframe { display: block; width: 100%; height: 760px; border: 0; background: #f3f4f6; }
+    .nota { margin: 14px 2px 0; font-size: .85rem; color: var(--texto-2); }
+    @media (max-width: 860px) {
+      .cliente { grid-template-columns: 1fr; }
+      .lista { display: none; }
+      .moldura.celular { width: 100%; max-width: 390px; }
+      .corpo { padding: 12px; }
+      .cabecalho, .ferramentas { padding-inline: 14px; }
+    }
+    @media (prefers-reduced-motion: reduce) { .moldura { transition: none; } }
+  </style>
+</head>
+<body>
+  <nav class="demo-barra" aria-label="Navegação da demonstração">
+    <a class="demo-voltar" href="../../">&larr; Voltar para a vitrine</a>
+    <strong class="demo-nome">resumo-do-dia</strong>
+    <a class="demo-codigo" href="https://github.com/srlorenzos/resumo-do-dia" target="_blank" rel="noopener">Código</a>
+    <span class="demo-selo">Demonstração com dados fictícios</span>
+  </nav>
+
+  <main class="app">
+    <p class="intro">Todo dia útil às 7h um agendador do GitHub Actions monta este e-mail com <b>agenda</b>, <b>tarefas</b> e <b>contas a pagar</b> e o envia pela Gmail API. Abaixo está o HTML real gerado por <code>node src/index.js --demo --previa</code>, dentro de um cliente de e-mail.</p>
+
+    <div class="janela">
+      <div class="janela-barra" aria-hidden="true"><i></i><i></i><i></i><span>Caixa de entrada</span></div>
+      <div class="cliente">
+        <aside class="lista" aria-label="Lista de e-mails (ilustrativa)">
+          <h2>Caixa de entrada</h2>
+          <div class="item sel nao-lido" aria-current="true">
+            <div class="l1"><span>Resumo do dia</span><time>07:00</time></div>
+            <div class="l2" id="lista-assunto">Seu dia</div>
+            <div class="l3">Agenda, tarefas e contas a pagar de hoje</div>
+          </div>
+          <div class="item"><div class="l1"><span>Nubank</span><time>ontem</time></div><div class="l2">Sua fatura fechou</div><div class="l3">O valor da fatura de outubro já está disponível</div></div>
+          <div class="item"><div class="l1"><span>Marina Souza</span><time>ontem</time></div><div class="l2">Churrasco sábado?</div><div class="l3">Vai rolar na casa da Lu, leva o pessoal</div></div>
+          <div class="item"><div class="l1"><span>GitHub</span><time>qua</time></div><div class="l2">[srlorenzos/palavreco] Novo PR</div><div class="l3">Ajuste no modo alto contraste</div></div>
+          <div class="item"><div class="l1"><span>Agência Norte</span><time>qua</time></div><div class="l2">Proposta revisada</div><div class="l3">Segue a versão com os ajustes combinados</div></div>
+          <div class="item"><div class="l1"><span>TickTick</span><time>ter</time></div><div class="l2">Lembrete: Renovar certificado</div><div class="l3">Vence em 3 dias</div></div>
+        </aside>
+
+        <section class="leitura" aria-label="E-mail aberto">
+          <div class="cabecalho">
+            <h1 id="assunto">Seu dia</h1>
+            <dl class="meta">
+              <dt>De</dt><dd><span class="avatar" aria-hidden="true">R</span>Resumo do dia &lt;resumo@exemplo.com.br&gt;</dd>
+              <dt>Para</dt><dd>Eduardo Lorenzo &lt;voce@exemplo.com.br&gt;</dd>
+              <dt>Assunto</dt><dd id="assunto2">Seu dia</dd>
+            </dl>
+          </div>
+          <div class="ferramentas">
+            <span class="rot">Visualização</span>
+            <div class="alterna" role="group" aria-label="Largura da visualização">
+              <button type="button" id="b-desktop" aria-pressed="true">Desktop</button>
+              <button type="button" id="b-celular" aria-pressed="false">Celular</button>
+            </div>
+          </div>
+          <div class="corpo">
+            <div class="moldura" id="moldura">
+              <iframe id="quadro" src="previa.html" title="Prévia do e-mail Seu dia" sandbox="allow-same-origin" loading="eager"></iframe>
+            </div>
+          </div>
+        </section>
+      </div>
+    </div>
+    <p class="nota">O e-mail usa tabelas e estilos inline, com largura máxima de 600 px, para renderizar bem no Gmail, no Outlook e no celular. O quadro acima roda em um iframe com <code>sandbox</code>, sem scripts.</p>
+  </main>
+
+  <script src="demo.js"></script>
+</body>
+</html>

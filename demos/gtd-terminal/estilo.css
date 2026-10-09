@@ -1,0 +1,82 @@
+:root {
+  color-scheme: dark;
+  --fundo: #0b0d12; --superficie: #141821; --superficie-2: #1b2030; --borda: #262c3d;
+  --texto: #e8ebf2; --texto-2: #9aa3b8; --destaque: #7c9cff; --destaque-2: #4fd1c5; --perigo: #ff6b6b;
+  --raio: 14px;
+  --mono: ui-monospace, "Cascadia Code", "SF Mono", Consolas, "Liberation Mono", Menlo, monospace;
+  /* ANSI */
+  --a-cinza: #7d869c; --a-vermelho: #ff6b6b; --a-verde: #7ee787; --a-amarelo: #f2cc60;
+  --a-azul: #79b8ff; --a-ciano: #4fd1c5;
+}
+* { box-sizing: border-box; }
+html, body { margin: 0; }
+body {
+  background: var(--fundo); color: var(--texto);
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; min-height: 100vh; overflow-x: hidden;
+}
+:focus-visible { outline: 3px solid var(--destaque-2); outline-offset: 2px; }
+button { font: inherit; color: inherit; cursor: pointer; }
+
+.barra {
+  display: flex; flex-wrap: wrap; align-items: center; gap: 8px 16px;
+  padding: 10px 16px; background: #141821; border-bottom: 1px solid #262c3d; color: #e8ebf2; font-size: .9rem;
+}
+.barra a { color: #7c9cff; text-decoration: none; }
+.barra a:hover { text-decoration: underline; }
+.barra .nome { margin-left: auto; margin-right: auto; }
+.barra .selo { border: 1px solid #4fd1c5; color: #4fd1c5; border-radius: 999px; padding: 2px 10px; font-size: .75rem; }
+@media (max-width: 560px) { .barra .nome { margin: 0; } }
+
+.palco { max-width: 960px; margin: 0 auto; padding: 24px 16px 40px; }
+.janela {
+  background: #0d1117; border: 1px solid var(--borda); border-radius: var(--raio); overflow: hidden;
+  box-shadow: 0 20px 60px #0009;
+}
+.titulo-janela {
+  display: flex; align-items: center; gap: 8px; padding: 10px 14px; background: var(--superficie-2);
+  border-bottom: 1px solid var(--borda); position: relative;
+}
+.bolinha { width: 12px; height: 12px; border-radius: 50%; display: inline-block; }
+.b1 { background: #ff5f57; } .b2 { background: #febc2e; } .b3 { background: #28c840; }
+.titulo-texto {
+  position: absolute; left: 0; right: 0; text-align: center; font-size: .8rem; color: var(--texto-2);
+  font-family: var(--mono); pointer-events: none;
+}
+
+.tela {
+  color-scheme: dark; scrollbar-color: #2d3550 transparent;
+  font-family: var(--mono); font-size: 14px; line-height: 1.5; padding: 14px 16px;
+  height: min(62vh, 560px); min-height: 360px; overflow-y: auto; overflow-x: auto; cursor: text;
+}
+#saida .l { white-space: pre; min-height: 1.5em; }
+#saida .eco .prompt { margin-right: 0; }
+.prompt { color: var(--a-verde); white-space: pre; }
+.prompt .dir { color: var(--a-azul); }
+.prompt.pergunta { color: var(--texto); }
+.linha-entrada { display: flex; align-items: baseline; }
+#entrada {
+  flex: 1; min-width: 0; background: transparent; border: 0; padding: 0; margin: 0; color: var(--texto);
+  font: inherit; caret-color: var(--destaque-2); caret-shape: block; outline: none;
+}
+.tela:focus-within .linha-entrada { background: #ffffff08; }
+
+.n { font-weight: 700; }
+.c-cinza { color: var(--a-cinza); } .c-vermelho { color: var(--a-vermelho); } .c-verde { color: var(--a-verde); }
+.c-amarelo { color: var(--a-amarelo); } .c-azul { color: var(--a-azul); } .c-ciano { color: var(--a-ciano); }
+
+.chips-area { margin-top: 18px; }
+.chips-titulo { margin: 0 0 8px; color: var(--texto-2); font-size: .85rem; }
+.chips { display: flex; flex-wrap: wrap; gap: 8px; }
+.chip {
+  background: var(--superficie); border: 1px solid var(--borda); border-radius: 999px; padding: 7px 13px;
+  font-family: var(--mono); font-size: .8rem; color: var(--texto); transition: border-color .15s, background .15s;
+}
+.chip:hover { border-color: var(--destaque); background: var(--superficie-2); }
+.dica-teclas { color: var(--texto-2); font-size: .75rem; margin: 12px 0 0; }
+.nota { color: var(--texto-2); font-size: .8rem; margin: 22px 0 0; text-align: center; }
+
+@media (max-width: 560px) {
+  .tela { font-size: 12px; padding: 12px; }
+  .palco { padding-top: 16px; }
+}
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; scroll-behavior: auto !important; } }

@@ -1,0 +1,32 @@
+# Site estático: sem build remoto. Os dados da demo do painel já vão gerados e comitados
+# (rode `node scripts/gerar-dados.mjs` para atualizá-los).
+[build]
+  publish = "."
+
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Content-Type-Options = "nosniff"
+    X-Frame-Options = "SAMEORIGIN"
+    Referrer-Policy = "strict-origin-when-cross-origin"
+    Permissions-Policy = "camera=(), microphone=(), geolocation=(), interest-cohort=()"
+    Cross-Origin-Opener-Policy = "same-origin"
+    # Inline apenas em estilos (as demos usam style="..."); scripts só de arquivos do próprio site.
+    Content-Security-Policy = "default-src 'self'; script-src 'self' 'wasm-unsafe-eval'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; font-src 'self'; connect-src 'self'; frame-src 'self'; worker-src 'self' blob:; object-src 'none'; base-uri 'none'; form-action 'none'; frame-ancestors 'self'"
+
+# Assets sem hash no nome: cache de 1 dia, revalidando em segundo plano por 1 semana.
+[[headers]]
+  for = "/assets/*"
+  [headers.values]
+    Cache-Control = "public, max-age=86400, stale-while-revalidate=604800"
+
+[[headers]]
+  for = "/demos/*"
+  [headers.values]
+    Cache-Control = "public, max-age=3600, stale-while-revalidate=86400"
+
+# Dados estáticos da demo do painel mudam quando o script é rodado de novo.
+[[headers]]
+  for = "/demos/painel-organizze/api/*"
+  [headers.values]
+    Cache-Control = "public, max-age=300"

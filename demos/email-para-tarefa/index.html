@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>email-para-tarefa · Demo</title>
+  <meta name="description" content="Demonstração interativa do email-para-tarefa: escreva o assunto de um e-mail e veja a tarefa do TickTick que seria criada.">
+  <link rel="icon" href="../../assets/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="../../assets/base.css">
+  <link rel="stylesheet" href="../../assets/demo-barra.css">
+  <link rel="stylesheet" href="demo.css">
+  <script src="../../assets/tema.js"></script>
+</head>
+<body>
+  <nav class="demo-barra" aria-label="Navegação da demonstração">
+    <a class="demo-voltar" href="../../">&larr; Voltar para a vitrine</a>
+    <strong class="demo-nome">email-para-tarefa</strong>
+    <a class="demo-codigo" href="https://github.com/srlorenzos/email-para-tarefa" target="_blank" rel="noopener">Código</a>
+    <span class="demo-selo">Demonstração com dados fictícios</span>
+  </nav>
+
+  <main class="app">
+    <header class="titulo">
+      <h1>Escreva o e-mail, veja a tarefa</h1>
+      <p>Este é o interpretador real do projeto (<code>src/interpretar.js</code>) rodando no seu navegador. A tarefa à direita atualiza enquanto você digita o assunto.</p>
+    </header>
+
+    <div class="duas">
+      <section class="compositor" aria-labelledby="t-comp">
+        <h2 id="t-comp" class="so-leitor">Compositor de e-mail</h2>
+        <div class="janela-topo"><span>Nova mensagem</span></div>
+        <div class="campo"><label for="para">Para</label><input id="para" type="text" value="tarefas-x7k2@seudominio.com" readonly></div>
+        <div class="campo"><label for="assunto">Assunto</label><input id="assunto" type="text" autocomplete="off" spellcheck="false" placeholder="Pagar boleto da luz #casa !alta @sexta"></div>
+        <div class="eco" id="eco" aria-hidden="true"></div>
+        <div class="campo corpo"><label for="corpo" class="so-leitor">Corpo</label>
+          <textarea id="corpo" rows="6" placeholder="Corpo do e-mail (vira a descrição da tarefa)">Vence dia 10. O código de barras está no PDF em anexo.
+
+&gt; Mensagem original:
+&gt; ...
+
+--
+Eduardo</textarea>
+        </div>
+        <div class="rodape-comp">
+          <button type="button" class="enviar" id="enviar">Enviar</button>
+          <span class="dica">Trechos citados com <code>&gt;</code> e a assinatura após <code>-- </code> ficam de fora da descrição.</span>
+        </div>
+      </section>
+
+      <section class="resultado" aria-labelledby="t-res">
+        <h2 id="t-res">Tarefa no TickTick</h2>
+        <div class="tarefa" id="tarefa" aria-live="polite">
+          <div class="tarefa-cab">
+            <span class="check" aria-hidden="true"></span>
+            <div class="tarefa-titulo" id="t-titulo"></div>
+            <span class="bandeira" id="t-prio" title=""></span>
+          </div>
+          <div class="tarefa-meta">
+            <span class="meta-item" id="t-data"></span>
+            <span class="meta-item lista" id="t-lista"></span>
+          </div>
+          <div class="chips" id="t-tags"></div>
+          <pre class="descricao" id="t-desc"></pre>
+          <div class="criada" id="criada" hidden>Tarefa criada</div>
+        </div>
+
+        <details class="json" id="json-det">
+          <summary>JSON enviado para a API <code>POST /open/v1/task</code></summary>
+          <pre id="json" tabindex="0"></pre>
+        </details>
+      </section>
+    </div>
+
+    <section class="exemplos" aria-labelledby="t-ex">
+      <h2 id="t-ex">Exemplos</h2>
+      <div class="chips-ex" id="exemplos"></div>
+    </section>
+
+    <section class="cola" aria-labelledby="t-cola">
+      <h2 id="t-cola">Cola da sintaxe</h2>
+      <div class="tabela-rolagem">
+        <table>
+          <thead><tr><th scope="col">Marca</th><th scope="col">Significado</th></tr></thead>
+          <tbody>
+            <tr><td><code>#tag</code></td><td>Tag (letras, números, <code>_</code> e <code>-</code>)</td></tr>
+            <tr><td><code>!alta</code> <code>!a</code> <code>!3</code></td><td>Prioridade alta. Média: <code>!media</code> <code>!m</code> <code>!2</code>. Baixa: <code>!baixa</code> <code>!b</code> <code>!1</code></td></tr>
+            <tr><td><code>^Lista</code></td><td>Lista de destino (<code>_</code> vira espaço: <code>^Casa_Nova</code>)</td></tr>
+            <tr><td><code>@hoje</code> <code>@amanha</code></td><td>Data relativa</td></tr>
+            <tr><td><code>@seg</code> ... <code>@dom</code></td><td>Próxima ocorrência do dia, sempre depois de hoje</td></tr>
+            <tr><td><code>@25/12</code> <code>@25/12/2026</code></td><td>Data (sem ano: a próxima ocorrência)</td></tr>
+            <tr><td><code>@14h</code> <code>@9h30</code> <code>@14:30</code></td><td>Hora (sem data, assume hoje)</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="nota">Prefixos <code>Re:</code>, <code>Fwd:</code>, <code>Enc:</code> e similares são removidos. Qualquer outra palavra, inclusive <code>@fulano</code>, fica no título.</p>
+    </section>
+  </main>
+
+  <script type="module" src="demo.js"></script>
+</body>
+</html>

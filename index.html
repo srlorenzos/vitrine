@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Eduardo Lorenzo · Vitrine de projetos</title>
+  <meta name="description" content="Ferramentas de organização pessoal, produtividade e infraestrutura, com demos que rodam no navegador. Portfólio de Eduardo Lorenzo (srlorenzos).">
+  <meta name="author" content="Eduardo Lorenzo">
+  <meta name="color-scheme" content="dark light">
+  <meta property="og:type" content="website">
+  <meta property="og:locale" content="pt_BR">
+  <meta property="og:title" content="Eduardo Lorenzo · Vitrine de projetos">
+  <meta property="og:description" content="Ferramentas de organização pessoal, produtividade e infraestrutura, com demos que rodam no navegador.">
+  <meta property="og:image" content="/assets/og.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="/assets/base.css">
+  <link rel="stylesheet" href="/assets/home.css">
+  <script src="/assets/tema.js"></script>
+</head>
+<body>
+  <a class="pular" href="#projetos">Pular para os projetos</a>
+
+  <header class="topo">
+    <div class="container">
+      <a class="logo" href="/" aria-label="Eduardo Lorenzo, início">
+        <img src="/assets/favicon.svg" width="28" height="28" alt="">
+        <span>srlorenzos</span>
+      </a>
+      <nav aria-label="Principal">
+        <a class="lnk" href="#projetos">Projetos</a>
+        <a class="lnk" href="#sobre">Sobre</a>
+        <a class="lnk" href="https://github.com/srlorenzos" target="_blank" rel="noopener">GitHub</a>
+        <button type="button" class="btn-icone" id="tema" aria-label="Alternar tema claro e escuro"></button>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero" aria-labelledby="titulo">
+      <div class="hero-grade" aria-hidden="true"></div>
+      <div class="container">
+        <span class="eyebrow"><i aria-hidden="true"></i> Portfólio de projetos</span>
+        <h1 class="nome" id="titulo">Eduardo <span>Lorenzo</span></h1>
+        <p class="frase">Ferramentas de organização pessoal, produtividade e infraestrutura — com demos que rodam no navegador.</p>
+        <div class="chips-lang" role="group" aria-label="Filtrar por linguagem" id="chips-lang">
+          <span class="rotulo">Linguagens</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="vitrine" id="projetos" aria-labelledby="t-projetos">
+      <div class="container">
+        <div class="filtros">
+          <h2 id="t-projetos">Projetos</h2>
+          <div class="abas" role="group" aria-label="Filtrar por categoria" id="abas"></div>
+          <p class="contagem" id="contagem" role="status" aria-live="polite"></p>
+        </div>
+        <div class="grade" id="grade"></div>
+        <p class="vazio" id="vazio" hidden>Nenhum projeto com essa combinação de filtros.</p>
+        <noscript><p class="vazio">Ative o JavaScript para ver a lista de projetos, ou visite <a href="https://github.com/srlorenzos">github.com/srlorenzos</a>.</p></noscript>
+      </div>
+    </section>
+
+    <section class="sobre" id="sobre" aria-labelledby="t-sobre">
+      <div class="container cols">
+        <h2 id="t-sobre">Sobre</h2>
+        <div>
+          <p>Sou <strong>Eduardo Lorenzo</strong> e construo ferramentas pequenas que resolvem problemas do meu dia a dia: saber o que tenho para hoje, não esquecer uma conta, transformar e-mail em tarefa, manter máquinas sob controle.</p>
+          <p>Quase tudo aqui é código aberto, em JavaScript, Python e Java, e prefere a biblioteca padrão a uma pilha de dependências. As demos usam <strong>dados fictícios</strong> e rodam inteiras no navegador, sem servidor e sem login.</p>
+          <ul class="principios">
+            <li><b>Zero ou poucas dependências</b>Menos coisa para quebrar e para auditar.</li>
+            <li><b>Segurança por padrão</b>Somente leitura, escopos mínimos, segredos fora do código.</li>
+            <li><b>Feito para uso real</b>Rodam todo dia na minha própria rotina.</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="rodape">
+    <div class="container">
+      <span>© <span id="ano">2026</span> Eduardo Lorenzo. Código sob licença MIT.</span>
+      <a href="https://github.com/srlorenzos" target="_blank" rel="noopener"><span id="ico-gh"></span> github.com/srlorenzos</a>
+    </div>
+  </footer>
+
+  <script type="module" src="/assets/home.js"></script>
+</body>
+</html>

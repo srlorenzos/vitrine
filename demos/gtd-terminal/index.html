@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>gtd-terminal — demo web</title>
+<meta name="description" content="Simulação em JavaScript do gtd-terminal, o método GTD no terminal em Java 17.">
+<link rel="stylesheet" href="estilo.css">
+</head>
+<body>
+<header class="barra">
+  <a class="voltar" href="../../">← Voltar para a vitrine</a>
+  <strong class="nome">gtd-terminal</strong>
+  <a class="codigo" href="https://github.com/srlorenzos/gtd-terminal" target="_blank" rel="noopener">Código</a>
+  <span class="selo">Versão web da demonstração</span>
+</header>
+
+<main class="palco">
+  <div class="janela">
+    <div class="titulo-janela">
+      <span class="bolinha b1"></span><span class="bolinha b2"></span><span class="bolinha b3"></span>
+      <span class="titulo-texto">gtd — bash</span>
+    </div>
+    <div class="tela" id="tela">
+      <div id="saida" role="log" aria-live="polite"></div>
+      <label class="linha-entrada" for="entrada">
+        <span id="prompt" class="prompt"></span>
+        <input id="entrada" type="text" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false" aria-label="Linha de comando">
+      </label>
+    </div>
+  </div>
+
+  <section class="chips-area" aria-label="Comandos sugeridos">
+    <p class="chips-titulo">Experimente:</p>
+    <div class="chips" id="chips"></div>
+    <p class="dica-teclas">↑/↓ histórico · Tab completa · Ctrl+L limpa · Ctrl+C cancela</p>
+  </section>
+
+  <p class="nota">Original em Java 17 — esta é uma simulação fiel em JavaScript.</p>
+</main>
+
+<script src="gtd.js"></script>
+<script src="ui.js"></script>
+</body>
+</html>

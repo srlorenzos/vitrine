@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Palavreco — demo web</title>
+<meta name="description" content="Versão web do Palavreco, o jogo de adivinhar a palavra de 5 letras em português.">
+<link rel="stylesheet" href="estilo.css">
+</head>
+<body>
+<header class="barra">
+  <a class="voltar" href="../../">← Voltar para a vitrine</a>
+  <strong class="nome">Palavreco</strong>
+  <a class="codigo" href="https://github.com/srlorenzos/palavreco" target="_blank" rel="noopener">Código</a>
+  <span class="selo">Versão web da demonstração</span>
+</header>
+
+<main class="jogo">
+  <div class="cabecalho">
+    <h1>PALAVRECO</h1>
+    <div class="acoes">
+      <button id="b-stats" class="icone" type="button" aria-label="Estatísticas" title="Estatísticas (F4)">▦</button>
+      <button id="b-contraste" class="icone" type="button" aria-label="Alto contraste" aria-pressed="false" title="Alto contraste (F3)">◐</button>
+      <button id="b-tema" class="icone" type="button" aria-label="Alternar tema claro/escuro" title="Tema claro/escuro (F2)">☀</button>
+    </div>
+  </div>
+  <p id="subtitulo" class="subtitulo">Carregando…</p>
+
+  <div id="grade" class="grade" role="grid" aria-label="Tentativas"></div>
+  <div id="teclado" class="teclado" aria-label="Teclado virtual"></div>
+
+  <button id="b-livre" class="modo-livre" type="button">Nova palavra aleatória</button>
+  <p id="status" class="sr" aria-live="polite"></p>
+  <p class="nota">Original em Python/tkinter — esta é a versão web da demo.</p>
+</main>
+
+<div id="toast" class="toast" role="status" hidden></div>
+
+<div id="modal" class="fundo-modal" hidden>
+  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="m-titulo">
+    <h2 id="m-titulo">ESTATÍSTICAS</h2>
+    <div class="numeros" id="m-numeros"></div>
+    <h3>DISTRIBUIÇÃO DE TENTATIVAS</h3>
+    <div class="barras" id="m-barras"></div>
+    <p id="m-final" class="final"></p>
+    <div class="botoes" id="m-botoes"></div>
+  </div>
+</div>
+
+<script src="palavras.js"></script>
+<script src="nucleo.js"></script>
+<script src="app.js"></script>
+</body>
+</html>

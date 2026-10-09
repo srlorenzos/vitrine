@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>mcp-pessoal · Demo</title>
+  <meta name="description" content="Demonstração do mcp-pessoal: uma conversa simulada com o Claude usando as ferramentas de agenda, tarefas e finanças.">
+  <link rel="icon" href="../../assets/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="../../assets/base.css">
+  <link rel="stylesheet" href="../../assets/demo-barra.css">
+  <link rel="stylesheet" href="demo.css">
+  <script src="../../assets/tema.js"></script>
+</head>
+<body>
+  <nav class="demo-barra" aria-label="Navegação da demonstração">
+    <a class="demo-voltar" href="../../">&larr; Voltar para a vitrine</a>
+    <strong class="demo-nome">mcp-pessoal</strong>
+    <a class="demo-codigo" href="https://github.com/srlorenzos/mcp-pessoal" target="_blank" rel="noopener">Código</a>
+    <span class="demo-selo">Demonstração com dados fictícios</span>
+  </nav>
+
+  <main class="app">
+    <header class="titulo">
+      <h1>Pergunte ao Claude sobre o seu dia</h1>
+      <p>Uma conversa simulada: o Claude chama as ferramentas do servidor MCP e responde com base no que elas devolvem. Os textos de entrada e saída seguem o formato real de cada ferramenta.</p>
+    </header>
+
+    <div class="duas">
+      <section class="chat" aria-labelledby="t-chat">
+        <div class="chat-topo">
+          <h2 id="t-chat">Conversa com o Claude</h2>
+          <button type="button" id="reiniciar" class="btn-peq">Reiniciar</button>
+        </div>
+        <div class="mensagens" id="mensagens" role="log" aria-live="polite" aria-relevant="additions"></div>
+        <div class="sugestoes" role="group" aria-label="Perguntas sugeridas">
+          <span class="rot">Perguntas sugeridas</span>
+          <button type="button" class="sug" data-cena="0">O que tenho pra hoje?</button>
+          <button type="button" class="sug" data-cena="1">Cria uma tarefa pra pagar o IPVA sexta, prioridade alta</button>
+          <button type="button" class="sug" data-cena="2">Como estão minhas finanças este mês?</button>
+        </div>
+      </section>
+
+      <aside class="lateral">
+        <section class="caixa" aria-labelledby="t-inst">
+          <h2 id="t-inst">Instalar no Claude Code</h2>
+          <div class="cmd"><code id="cmd">claude mcp add pessoal -- node C:/caminho/mcp-pessoal/src/index.js</code><button type="button" class="btn-peq" id="copiar">Copiar</button></div>
+          <p class="peq">Também funciona no Claude Desktop. Fontes sem credenciais ficam desligadas e suas ferramentas nem aparecem.</p>
+        </section>
+
+        <section class="caixa" aria-labelledby="t-ferr">
+          <h2 id="t-ferr">Ferramentas do servidor</h2>
+          <ul class="ferramentas" id="ferramentas"></ul>
+          <p class="peq">Prompts prontos: <code>revisao_semanal</code> (roteiro GTD) e <code>planejar_dia</code>. Compras no cartão nunca contam como conta a pagar: o que vence é a fatura.</p>
+        </section>
+      </aside>
+    </div>
+  </main>
+
+  <script type="module" src="demo.js"></script>
+</body>
+</html>

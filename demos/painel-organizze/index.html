@@ -1,0 +1,140 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Painel Organizze · Demo</title>
+  <meta name="description" content="Painel financeiro pessoal para o Organizze.">
+  <meta name="color-scheme" content="light dark">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%232a78d6'/%3E%3Crect x='7' y='15' width='5' height='10' rx='1.5' fill='%23fff'/%3E%3Crect x='14' y='8' width='5' height='17' rx='1.5' fill='%23fff'/%3E%3Crect x='21' y='12' width='5' height='13' rx='1.5' fill='%23fff'/%3E%3C/svg%3E">
+  <link rel="stylesheet" href="estilo.css">
+  <link rel="stylesheet" href="../../assets/demo-barra.css">
+  <script src="tema.js"></script>
+</head>
+<body>
+  <nav class="demo-barra" aria-label="Navegação da demonstração">
+    <a class="demo-voltar" href="../../">&larr; Voltar para a vitrine</a>
+    <strong class="demo-nome">painel-organizze</strong>
+    <a class="demo-codigo" href="https://github.com/srlorenzos/painel-organizze" target="_blank" rel="noopener">Código</a>
+    <span class="demo-selo">Demonstração com dados fictícios</span>
+  </nav>
+  <a class="pular" href="#principal">Pular para o conteúdo</a>
+
+  <header class="topo">
+    <div class="topo-interno">
+      <div class="marca">
+        <h1>Painel Organizze</h1>
+        <span id="selo-demo" class="selo" hidden>Demonstração</span>
+      </div>
+      <div class="seletor" role="group" aria-label="Seletor de mês">
+        <button type="button" id="mes-anterior" class="botao-icone" aria-label="Mês anterior"></button>
+        <span id="mes-rotulo" class="mes-rotulo">&nbsp;</span>
+        <button type="button" id="mes-proximo" class="botao-icone" aria-label="Próximo mês"></button>
+      </div>
+      <button type="button" id="tema" class="botao-icone" aria-label="Alternar tema claro e escuro"></button>
+    </div>
+  </header>
+
+  <main id="principal" class="pagina">
+    <div id="erro" class="erro" role="alert" hidden>
+      <span id="erro-msg"></span>
+      <button type="button" id="erro-repetir" class="botao">Tentar de novo</button>
+    </div>
+    <p id="status" class="so-leitor" role="status" aria-live="polite"></p>
+
+    <section class="kpis" aria-label="Resumo do mês">
+      <article class="card kpi" id="kpi-receitas">
+        <h2><span class="chave rec" aria-hidden="true"></span>Receitas</h2>
+        <p class="kpi-valor esqueleto">&nbsp;</p>
+        <p class="kpi-sub">Entradas no mês, sem transferências</p>
+      </article>
+      <article class="card kpi" id="kpi-despesas">
+        <h2><span class="chave desp" aria-hidden="true"></span>Despesas</h2>
+        <p class="kpi-valor esqueleto">&nbsp;</p>
+        <p class="kpi-sub">Saídas no mês, incluindo cartão</p>
+      </article>
+      <article class="card kpi" id="kpi-resultado">
+        <h2>Resultado</h2>
+        <p class="kpi-valor esqueleto">&nbsp;</p>
+        <p class="kpi-sub"><span class="indicador"></span></p>
+      </article>
+      <article class="card kpi" id="kpi-apagar">
+        <h2>A pagar em 30 dias</h2>
+        <p class="kpi-valor esqueleto">&nbsp;</p>
+        <p class="kpi-sub">Contas e faturas abertas</p>
+      </article>
+    </section>
+
+    <div class="grade">
+      <section class="card" id="card-meses" aria-labelledby="t-meses">
+        <div class="card-topo">
+          <div>
+            <h2 id="t-meses">Receitas × despesas</h2>
+            <p class="sub">Últimos 6 meses. Clique num mês para selecioná-lo.</p>
+          </div>
+          <button type="button" class="botao" data-alternar="card-meses" aria-pressed="false">Ver como tabela</button>
+        </div>
+        <ul class="legenda" aria-label="Legenda">
+          <li><span class="chave rec" aria-hidden="true"></span>Receitas</li>
+          <li><span class="chave desp" aria-hidden="true"></span>Despesas</li>
+        </ul>
+        <div class="vista-grafico grafico" id="g-meses"><div class="esqueleto bloco" aria-hidden="true"></div></div>
+        <div class="vista-tabela" hidden></div>
+      </section>
+
+      <section class="card" id="card-categorias" aria-labelledby="t-cat">
+        <div class="card-topo">
+          <div>
+            <h2 id="t-cat">Despesas por categoria</h2>
+            <p class="sub" id="sub-cat">No mês selecionado</p>
+          </div>
+          <button type="button" class="botao" data-alternar="card-categorias" aria-pressed="false">Ver como tabela</button>
+        </div>
+        <div class="vista-grafico grafico" id="g-categorias"><div class="esqueleto bloco" aria-hidden="true"></div></div>
+        <div class="vista-tabela" hidden></div>
+      </section>
+
+      <section class="card" id="card-acumulado" aria-labelledby="t-acum">
+        <div class="card-topo">
+          <div>
+            <h2 id="t-acum">Gasto acumulado no mês</h2>
+            <p class="sub">Comparado ao mês anterior, dia a dia.</p>
+          </div>
+          <button type="button" class="botao" data-alternar="card-acumulado" aria-pressed="false">Ver como tabela</button>
+        </div>
+        <ul class="legenda" aria-label="Legenda">
+          <li><span class="chave desp" aria-hidden="true"></span><span id="leg-atual">Este mês</span></li>
+          <li><span class="chave ant" aria-hidden="true"></span><span id="leg-ant">Mês anterior</span></li>
+        </ul>
+        <div class="vista-grafico grafico" id="g-acumulado"><div class="esqueleto bloco" aria-hidden="true"></div></div>
+        <div class="vista-tabela" hidden></div>
+      </section>
+
+      <section class="card" aria-labelledby="t-contas">
+        <div class="card-topo">
+          <div>
+            <h2 id="t-contas">Próximas contas</h2>
+            <p class="sub">Vencimentos nos próximos 30 dias.</p>
+          </div>
+        </div>
+        <div id="contas"><div class="esqueleto bloco" aria-hidden="true"></div></div>
+      </section>
+
+      <section class="card largo" aria-labelledby="t-maiores">
+        <div class="card-topo">
+          <div>
+            <h2 id="t-maiores">Maiores gastos do mês</h2>
+            <p class="sub">As 8 maiores despesas, cartão incluído.</p>
+          </div>
+        </div>
+        <div id="maiores"><div class="esqueleto bloco" aria-hidden="true"></div></div>
+      </section>
+    </div>
+
+    <footer class="rodape">Somente leitura. Dados do Organizze, calculados no seu computador.</footer>
+  </main>
+
+  <div id="tooltip" class="tooltip" role="tooltip" hidden></div>
+  <script type="module" src="app.js"></script>
+</body>
+</html>

@@ -1,0 +1,15 @@
+/* Barra superior padrão das demos. Funciona mesmo sem base.css (valores de reserva). */
+.demo-barra {
+  display: flex; align-items: center; gap: 10px 16px; flex-wrap: wrap;
+  padding: 10px 16px;
+  background: #0b0d12; color: #e8ebf2;
+  border-bottom: 1px solid #262c3d;
+  font: 14px/1.4 system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+}
+.demo-barra a { color: #e8ebf2; text-decoration: none; padding: 5px 10px; border-radius: 999px; border: 1px solid #262c3d; background: #141821; transition: border-color .2s, color .2s; }
+.demo-barra a:hover { border-color: #7c9cff; color: #7c9cff; }
+.demo-barra a:focus-visible { outline: 2px solid #7c9cff; outline-offset: 2px; }
+.demo-nome { font-weight: 650; letter-spacing: -.01em; font-family: ui-monospace, "Cascadia Code", Consolas, monospace; font-size: 13px; }
+.demo-codigo { margin-left: auto; }
+.demo-selo { font-size: 12px; font-weight: 600; padding: 4px 10px; border-radius: 999px; color: #4fd1c5; border: 1px solid rgb(79 209 197 / .4); background: rgb(79 209 197 / .08); }
+@media (max-width: 640px) { .demo-codigo { margin-left: 0; } .demo-selo { flex-basis: 100%; text-align: center; } }
