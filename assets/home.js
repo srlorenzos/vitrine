@@ -36,8 +36,11 @@ function criarCard(p) {
   const el = document.createElement('article');
   el.className = 'card';
   el.dataset.id = p.id;
-  const breve = p.status === 'em-breve' || !p.demo;
-  const demo = breve
+  const semDemo = !p.demo && p.status !== 'em-breve';
+  const breve = p.status === 'em-breve' || (!p.demo && !p.site && !p.codigo);
+  const demo = semDemo && (p.site || p.codigo)
+    ? `<a class="btn primario" href="${esc(p.site || p.codigo)}" target="_blank" rel="noopener">${icones.site} ${p.site ? 'Abrir site' : 'Ver no GitHub'}<span class="so-leitor"> de ${esc(p.nome)}</span></a>`
+    : breve
     ? '<span class="btn" aria-disabled="true" title="Demo em breve">Em breve</span>'
     : `<a class="btn primario" href="${esc(p.demo)}">${icones.play} Abrir demo<span class="so-leitor"> de ${esc(p.nome)}</span></a>`;
   el.innerHTML = `

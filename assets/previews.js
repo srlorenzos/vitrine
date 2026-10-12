@@ -2,6 +2,14 @@
 const linha = (w, extra = '') => `<i class="pv-linha ${extra}" style="--w:${w}%"></i>`;
 
 export const previews = {
+  coube: `
+    <div class="pv pv-coube" style="display:flex;align-items:center;justify-content:center;height:100%;gap:10px">
+      <svg viewBox="0 0 64 64" width="64" height="64" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" style="color:#38bdf8"><path d="M32 6l20 8v16c0 12-8.4 20.6-20 24-11.6-3.4-20-12-20-24V14z"/><path d="M22 31l7 7 13-14"/></svg>
+    </div>`,
+  horda: `
+    <div class="pv pv-horda" style="display:flex;align-items:center;justify-content:center;height:100%;gap:6px">
+      <svg viewBox="0 0 120 56" width="150" height="70" fill="#f43f5e" opacity=".9"><circle cx="60" cy="30" r="9" fill="#fbbf24"/><circle cx="20" cy="14" r="5"/><circle cx="34" cy="44" r="5"/><circle cx="96" cy="12" r="5"/><circle cx="104" cy="40" r="5"/><circle cx="82" cy="50" r="4"/><circle cx="44" cy="8" r="4"/></svg>
+    </div>`,
   resumo: `
     <div class="pv pv-resumo">
       <div class="pv-cab"><span>RESUMO DO DIA</span><b>quinta-feira, 8 de outubro</b></div>

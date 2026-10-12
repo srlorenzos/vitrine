@@ -2,6 +2,8 @@
 const svg = (corpo) => `<svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">${corpo}</svg>`;
 
 export const icones = {
+  coube: svg('<path d="M12 3l8 3v6c0 4.5-3.2 7.8-8 9-4.8-1.2-8-4.5-8-9V6z"/><path d="M8.8 12.2l2.2 2.2 4.2-4.4"/>'),
+  horda: svg('<circle cx="12" cy="9" r="4"/><path d="M5 20c0-3.6 3.1-6 7-6s7 2.4 7 6"/><path d="M3 6l2 1M21 6l-2 1M12 2v1.5"/>'),
   resumo: svg('<circle cx="12" cy="8" r="3.2"/><path d="M12 2.2v1.4M5.6 4.8l1 1M18.4 4.8l-1 1M3 10h1.4M19.6 10H21"/><rect x="3.5" y="13" width="17" height="8" rx="2"/><path d="M4 14l8 5 8-5"/>'),
   email: svg('<rect x="3" y="5" width="12" height="9" rx="2"/><path d="M3.5 6l5.5 4.2L14.5 6"/><path d="M15 17.5l2.2 2.2L21.5 15"/><path d="M8 18H5"/>'),
   painel: svg('<rect x="3" y="3" width="18" height="18" rx="3"/><path d="M8 17v-4M12 17V8M16 17v-6"/>'),
