@@ -1,13 +1,13 @@
 # vitrine
 
-Portfólio estático de Eduardo Lorenzo ([srlorenzos](https://github.com/srlorenzos)) com demos que rodam no navegador. HTML, CSS e JavaScript puros, sem framework e sem CDN. Publicado na Netlify.
+Portfólio estático de Eduardo Lorenzo ([srlorenzos](https://github.com/srlorenzos)) com demos que rodam no navegador. HTML, CSS e JavaScript puros, sem framework e sem CDN. Publicado na Vercel ([srlorenzos.vercel.app](https://srlorenzos.vercel.app)); o deploy é feito a partir de uma cópia local sem `.git`, não por integração automática com este repositório.
 
 ## Estrutura
 
 - `index.html`, `assets/`: página inicial. A lista de projetos fica em `assets/projetos.js`.
 - `demos/<projeto>/`: uma demo por projeto, todas com dados fictícios.
 - `scripts/gerar-dados.mjs`: gera `demos/painel-organizze/api/*.json` (12 meses) a partir de `../painel-organizze`.
-- `netlify.toml`: publicação sem build, cabeçalhos de segurança e cache.
+- `netlify.toml`, `vercel.json`: cabeçalhos de segurança e cache (publicação sem build). O site está no ar pela Vercel; o `netlify.toml` é mantido por compatibilidade, caso a Netlify volte a ser usada.
 
 ## Rodar localmente
 
