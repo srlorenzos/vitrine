@@ -10,6 +10,17 @@ export const previews = {
     <div class="pv pv-horda" style="display:flex;align-items:center;justify-content:center;height:100%;gap:6px">
       <svg viewBox="0 0 120 56" width="150" height="70" fill="#f43f5e" opacity=".9"><circle cx="60" cy="30" r="9" fill="#fbbf24"/><circle cx="20" cy="14" r="5"/><circle cx="34" cy="44" r="5"/><circle cx="96" cy="12" r="5"/><circle cx="104" cy="40" r="5"/><circle cx="82" cy="50" r="4"/><circle cx="44" cy="8" r="4"/></svg>
     </div>`,
+  coroa: `
+    <div class="pv pv-coroa" style="display:flex;align-items:center;justify-content:center;height:100%">
+      <svg viewBox="0 0 220 96" width="224" height="98" style="border-radius:8px" aria-hidden="true">
+        <rect width="220" height="96" fill="#2a2418"/>
+        <g stroke="#4a4030" stroke-width=".8" fill="none"><path d="M0 24h220M0 48h220M0 72h220M44 0v96M88 0v96M132 0v96M176 0v96"/></g>
+        <path d="M0 78 C50 64 90 84 140 70 S200 78 220 66 V96 H0Z" fill="#33402a" opacity=".7"/>
+        <g stroke="#0d0f14" stroke-width="2"><circle cx="30" cy="30" r="9" fill="#4f8fe0"/><circle cx="30" cy="62" r="9" fill="#4f8fe0"/><circle cx="62" cy="46" r="7" fill="#7fb2f0"/><circle cx="170" cy="40" r="11" fill="#d85a46"/><circle cx="150" cy="66" r="8" fill="#e8806a"/></g>
+        <path d="M96 40l4-18 8 9 8-14 8 14 8-9 4 18z" fill="#ffd24a" stroke="#6a4310" stroke-width="2" stroke-linejoin="round"/>
+        <path d="M118 54l22-10" stroke="#ff8a3a" stroke-width="2.5" stroke-dasharray="4 4"/><circle cx="142" cy="44" r="4" fill="#ffb347"/>
+      </svg>
+    </div>`,
   rumo: `
     <div class="pv pv-resumo">
       <div class="pv-cab"><span>RUMO</span><b>Hoje · 5 tarefas</b></div>
@@ -17,7 +28,7 @@ export const previews = {
       <div class="pv-lin"><u class="pv-ponto"></u>${linha(54)}</div>
       <div class="pv-sec">Finanças <span class="pv-pill">Open Finance</span></div>
       <svg viewBox="0 0 220 30" preserveAspectRatio="none" aria-hidden="true" style="width:100%;height:26px">
-        <g class="barras"><rect x="10" y="12" width="12" height="16" rx="2" class="rec"/><rect x="24" y="18" width="12" height="10" rx="2" class="desp"/><rect x="58" y="8" width="12" height="20" rx="2" class="rec"/><rect x="72" y="16" width="12" height="12" rx="2" class="desp"/><rect x="106" y="10" width="12" height="18" rx="2" class="rec"/><rect x="120" y="14" width="12" height="14" rx="2" class="desp"/><rect x="154" y="4" width="12" height="24" rx="2" class="rec"/><rect x="168" y="12" width="12" height="16" rx="2" class="desp"/></g>
+        <g><rect x="10" y="12" width="12" height="16" rx="2" fill="#4fd1c5"/><rect x="24" y="18" width="12" height="10" rx="2" fill="#7c9cff"/><rect x="58" y="8" width="12" height="20" rx="2" fill="#4fd1c5"/><rect x="72" y="16" width="12" height="12" rx="2" fill="#7c9cff"/><rect x="106" y="10" width="12" height="18" rx="2" fill="#4fd1c5"/><rect x="120" y="14" width="12" height="14" rx="2" fill="#7c9cff"/><rect x="154" y="4" width="12" height="24" rx="2" fill="#4fd1c5"/><rect x="168" y="12" width="12" height="16" rx="2" fill="#7c9cff"/></g>
       </svg>
     </div>`,
   resumo: `

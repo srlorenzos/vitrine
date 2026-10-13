@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#1a110d">
+<meta name="description" content="Coroa de Brasas — estratégia por turnos com heróis, exércitos e combate tático. Jogue no navegador.">
+<title>Coroa de Brasas</title>
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="assets/icon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="/assets/demo-barra.css">
+<link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="embed.css">
+</head>
+<body class="embed">
+<header class="demo-barra"><a href="../../">← Voltar para a vitrine</a><strong class="demo-nome">coroa-de-brasas</strong><a class="demo-codigo" href="https://github.com/srlorenzos/coroa-de-brasas" target="_blank" rel="noopener">Vitrine no GitHub</a><span class="demo-selo">Jogue agora</span></header>
+<div id="app">
+  <header id="topbar" class="hide"><div id="resbar"></div><span class="sp"></span><button id="bMute" title="Som">🔊</button><button id="bMenu" title="Menu (Esc)">☰ Menu</button></header>
+  <div id="stage">
+    <div id="board"><canvas id="cv" width="960" height="600"></canvas><div id="banner"></div></div>
+    <aside id="side" class="hide">
+      <div class="herobox"><canvas id="portrait" width="96" height="112"></canvas><div id="heroInfo"></div></div>
+      <div id="army"></div>
+      <canvas id="mini" width="220" height="140" title="Clique para mover a câmera"></canvas>
+      <div class="btns"><button id="bTown">🏰 Cidade (T)</button><button id="bEnd" class="pri">🌙 Passar o dia (Espaço)</button></div>
+    </aside>
+  </div>
+  <div id="log" aria-live="polite"></div>
+</div>
+<div id="overlay"></div>
+<div id="tip"></div>
+<script src="data.js"></script>
+<script src="art.js"></script>
+<script src="game.js"></script>
+<script src="battle.js"></script>
+<script src="boot.js"></script>
+</body>
+</html>
