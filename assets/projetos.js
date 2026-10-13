@@ -15,6 +15,20 @@ export const linguagens = ['JavaScript', 'Python', 'Java'];
 
 export const projetos = [
   {
+    id: 'rumo',
+    nome: 'rumo',
+    descricao: 'Tarefas com GTD completo, agenda (Google e Outlook), finanças com Open Finance, hábitos e foco num só app. Funciona offline (PWA) e no Windows (.exe).',
+    categorias: ['organizacao', 'financas', 'windows'],
+    linguagens: ['JavaScript'],
+    tags: ['GTD', 'PWA', 'Open Finance', 'Electron', 'Google/Outlook', 'zero deps'],
+    icone: 'rumo',
+    preview: 'rumo',
+    status: 'pronto',
+    demo: 'demos/rumo/',
+    codigo: `${GITHUB}/rumo-showcase`,
+    site: 'https://rumo-demo-phi.vercel.app/baixar',
+  },
+  {
     id: 'quorum-trader',
     nome: 'quorum-trader',
     descricao: 'Robô de trade para Windows: agentes que votam, aprendem de hora em hora e leem notícias via RSS. Mini índice (MT5/XP), forex e cripto, com modo simulado, backtest e travas de risco.',

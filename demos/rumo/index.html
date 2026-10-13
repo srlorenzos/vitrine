@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#0e9f8c">
+<meta name="description" content="Rumo — tarefas com GTD, agenda, finanças com Open Finance e hábitos num só app.">
+<title>Rumo</title>
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="assets/icon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="/assets/demo-barra.css">
+<link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="embed.css">
+</head>
+<body class="embed">
+<header class="demo-barra"><a href="../../">← Voltar para a vitrine</a><strong class="demo-nome">rumo</strong><a class="demo-codigo" href="https://github.com/srlorenzos/rumo-showcase" target="_blank" rel="noopener">Vitrine no GitHub</a><span class="demo-selo">Demo com dados fictícios</span></header>
+<div id="demoBanner" class="demo-banner hide">Versão de demonstração com dados fictícios — seus dados ficam só neste navegador.</div>
+<div id="shell">
+  <aside id="nav">
+    <div class="brand"><svg viewBox="0 0 32 32" aria-hidden="true"><rect width="32" height="32" rx="8" fill="#0e9f8c"/><path d="M8 22 L16 7 L24 22 L16 18 Z" fill="#fff"/></svg>Rumo</div>
+    <div id="navscroll"></div>
+    <div id="navfoot"><button id="bPalette" class="sm" title="Paleta de comandos (Ctrl+K)">⌘ Ctrl+K</button><button id="bTheme" class="sm ghost" title="Tema">🌓</button></div>
+  </aside>
+  <main id="main"></main>
+</div>
+<dialog id="dlg"></dialog>
+<dialog id="palette"><input id="pin" placeholder="Buscar tarefas, ir para…, criar…" autocomplete="off"><div class="plist" id="plist"></div></dialog>
+<div id="toasts"></div>
+<script src="demo-flag.js"></script>
+<script src="src/util.js"></script>
+<script src="src/store.js"></script>
+<script src="src/gtd.js"></script>
+<script src="src/tasks.js"></script>
+<script src="src/agenda.js"></script>
+<script src="src/finance.js"></script>
+<script src="src/openfinance.js"></script>
+<script src="src/habits.js"></script>
+<script src="src/integrations.js"></script>
+<script src="src/ai.js"></script>
+<script src="src/sample.js"></script>
+<script src="src/settings.js"></script>
+<script src="src/app.js"></script>
+<script src="src/boot.js"></script>
+</body>
+</html>

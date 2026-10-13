@@ -10,6 +10,16 @@ export const previews = {
     <div class="pv pv-horda" style="display:flex;align-items:center;justify-content:center;height:100%;gap:6px">
       <svg viewBox="0 0 120 56" width="150" height="70" fill="#f43f5e" opacity=".9"><circle cx="60" cy="30" r="9" fill="#fbbf24"/><circle cx="20" cy="14" r="5"/><circle cx="34" cy="44" r="5"/><circle cx="96" cy="12" r="5"/><circle cx="104" cy="40" r="5"/><circle cx="82" cy="50" r="4"/><circle cx="44" cy="8" r="4"/></svg>
     </div>`,
+  rumo: `
+    <div class="pv pv-resumo">
+      <div class="pv-cab"><span>RUMO</span><b>Hoje · 5 tarefas</b></div>
+      <div class="pv-lin"><u class="pv-ponto alta"></u>${linha(72)}</div>
+      <div class="pv-lin"><u class="pv-ponto"></u>${linha(54)}</div>
+      <div class="pv-sec">Finanças <span class="pv-pill">Open Finance</span></div>
+      <svg viewBox="0 0 220 30" preserveAspectRatio="none" aria-hidden="true" style="width:100%;height:26px">
+        <g class="barras"><rect x="10" y="12" width="12" height="16" rx="2" class="rec"/><rect x="24" y="18" width="12" height="10" rx="2" class="desp"/><rect x="58" y="8" width="12" height="20" rx="2" class="rec"/><rect x="72" y="16" width="12" height="12" rx="2" class="desp"/><rect x="106" y="10" width="12" height="18" rx="2" class="rec"/><rect x="120" y="14" width="12" height="14" rx="2" class="desp"/><rect x="154" y="4" width="12" height="24" rx="2" class="rec"/><rect x="168" y="12" width="12" height="16" rx="2" class="desp"/></g>
+      </svg>
+    </div>`,
   resumo: `
     <div class="pv pv-resumo">
       <div class="pv-cab"><span>RESUMO DO DIA</span><b>quinta-feira, 8 de outubro</b></div>
