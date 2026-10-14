@@ -6,6 +6,94 @@ export const previews = {
     <div class="pv pv-coube" style="display:flex;align-items:center;justify-content:center;height:100%;gap:10px">
       <svg viewBox="0 0 64 64" width="64" height="64" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" style="color:#38bdf8"><path d="M32 6l20 8v16c0 12-8.4 20.6-20 24-11.6-3.4-20-12-20-24V14z"/><path d="M22 31l7 7 13-14"/></svg>
     </div>`,
+  'coube-desinstalador': `
+    <div class="pv pv-coubeapp pv-desinstalador">
+      <div class="pv-ca-top"><svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h16"/><path d="M9 7V4.6c0-.9.7-1.6 1.6-1.6h2.8c.9 0 1.6.7 1.6 1.6V7"/><path d="M6.5 7l.9 12.4a2 2 0 002 1.8h5.2a2 2 0 002-1.8L17.5 7"/></svg><b>Remover programa</b></div>
+      <div class="pv-ca-row fora"><span>App antigo</span><em>412 MB</em></div>
+      <div class="pv-ca-row fora"><span>Sobras no registro</span><em>18 chaves</em></div>
+      <div class="pv-ca-row fora"><span>Pastas órfãs</span><em>6</em></div>
+      <div class="pv-ca-bar"><i style="width:100%"></i></div>
+    </div>`,
+  'coube-turbo': `
+    <div class="pv pv-coubeapp pv-turbo">
+      <svg class="pv-gauge" viewBox="0 0 120 68" aria-hidden="true">
+        <path d="M10 62a50 50 0 01100 0" fill="none" stroke="var(--borda)" stroke-width="8" stroke-linecap="round"/>
+        <path d="M10 62a50 50 0 0170-46" fill="none" stroke="#fb923c" stroke-width="8" stroke-linecap="round"/>
+        <line x1="60" y1="62" x2="92" y2="30" stroke="#fb923c" stroke-width="3" stroke-linecap="round"/>
+        <circle cx="60" cy="62" r="4" fill="#fb923c"/>
+      </svg>
+      <div class="pv-ca-row"><span>Inicialização do Windows</span><em class="up">-38%</em></div>
+      <div class="pv-ca-row"><span>Processos em segundo plano</span><em class="up">-12</em></div>
+    </div>`,
+  'coube-atualiza': `
+    <div class="pv pv-coubeapp pv-atualiza">
+      <div class="pv-ca-row ok"><span>Navegador</span><em>1.2 → 1.4</em></div>
+      <div class="pv-ca-row ok"><span>Leitor de PDF</span><em>atualizado</em></div>
+      <div class="pv-ca-row pendente"><span>Compactador</span><em>3.0 → 3.3</em></div>
+      <div class="pv-ca-row pendente"><span>Runtime .NET</span><em>baixando…</em></div>
+    </div>`,
+  'coube-escudo': `
+    <div class="pv pv-coubeapp pv-escudo">
+      <div class="pv-escudo-radar">
+        <svg viewBox="0 0 64 64" width="56" height="56" fill="none" stroke="#34d399" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M32 6l20 8v16c0 12-8.4 20.6-20 24-11.6-3.4-20-12-20-24V14z"/><path d="M22 31l7 7 13-14"/></svg>
+        <i class="pv-pulso"></i>
+      </div>
+      <div class="pv-ca-row"><span>Varredura em tempo real</span><em class="up">ativa</em></div>
+      <div class="pv-ca-row"><span>Ameaças encontradas</span><em>0</em></div>
+    </div>`,
+  'coube-drivers': `
+    <div class="pv pv-coubeapp pv-drivers">
+      <div class="pv-ca-row ok"><span>Placa de vídeo</span><em>v31.0 ✓</em></div>
+      <div class="pv-ca-row ok"><span>Chipset</span><em>v10.1 ✓</em></div>
+      <div class="pv-ca-row pendente"><span>Rede Wi-Fi</span><em>novo: v22.6</em></div>
+      <div class="pv-ca-row"><span>Backup de drivers</span><em class="up">pronto</em></div>
+    </div>`,
+  'status-sentinela': `
+    <div class="pv pv-sentinela">
+      <div class="pv-sent-row"><u class="on"></u><span>portfolio.coube.shop</span><em>99.9%</em></div>
+      <div class="pv-sent-row"><u class="on"></u><span>quorum-trader</span><em>100%</em></div>
+      <div class="pv-sent-row"><u class="on"></u><span>farol-rmm</span><em>99.7%</em></div>
+      <div class="pv-sent-foot">checado a cada hora · GitHub Actions</div>
+    </div>`,
+  'valida-br': `
+    <div class="pv pv-valida">
+      <div class="pv-valida-row ok"><span>CPF</span><code>123.456.789-09</code></div>
+      <div class="pv-valida-row ok"><span>CNPJ</span><code>12.ABC.345/0001-9X</code></div>
+      <div class="pv-valida-row erro"><span>CEP</span><code>00000-000</code></div>
+    </div>`,
+  'infra-toolkit': `
+    <div class="pv pv-infra">
+      <div class="pv-infra-row"><span>CPU</span><i style="--p:28%"></i></div>
+      <div class="pv-infra-row"><span>Disco</span><i style="--p:64%"></i></div>
+      <div class="pv-infra-row"><span>Rede</span><i style="--p:12%"></i></div>
+      <div class="pv-infra-foot">relatório HTML · Windows &amp; Linux</div>
+    </div>`,
+  'wand-enhancer': `
+    <div class="pv pv-wand">
+      <svg viewBox="0 0 160 90" aria-hidden="true">
+        <defs><linearGradient id="pvwand" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#a78bfa"/><stop offset="1" stop-color="#60a5fa"/></linearGradient></defs>
+        <path d="M20 70L100 10" stroke="url(#pvwand)" stroke-width="5" stroke-linecap="round"/>
+        <circle cx="100" cy="10" r="10" fill="none" stroke="#a78bfa" stroke-width="2" opacity=".7"/>
+        <circle cx="112" cy="24" r="3" fill="#a78bfa"/><circle cx="122" cy="14" r="2" fill="#60a5fa"/><circle cx="108" cy="36" r="2" fill="#60a5fa"/>
+      </svg>
+      <span class="pv-wand-tag">UX + interoperabilidade</span>
+    </div>`,
+  'veil-wardens': `
+    <div class="pv pv-veil">
+      <svg viewBox="0 0 224 120" aria-hidden="true">
+        <defs>
+          <radialGradient id="pvveilbg" cx="30%" cy="35%" r="75%"><stop offset="0" stop-color="#2a3a66"/><stop offset="1" stop-color="#0a0d16"/></radialGradient>
+          <linearGradient id="pvveilblade" x1="0" y1="1" x2="1" y2="0"><stop offset="0" stop-color="#7cc7ff"/><stop offset="1" stop-color="#eaf6ff"/></linearGradient>
+        </defs>
+        <rect width="224" height="120" fill="url(#pvveilbg)"/>
+        <path d="M40 104L150 20" stroke="url(#pvveilblade)" stroke-width="5" stroke-linecap="round"/>
+        <path d="M40 104L150 20" stroke="#eaf6ff" stroke-width="1.4" stroke-linecap="round" opacity=".8"/>
+        <path d="M136 30l20-14 10 10-20 14z" fill="#283449" stroke="#7cc7ff" stroke-width="1.5"/>
+        <circle cx="178" cy="34" r="30" fill="#7cc7ff" opacity=".08"/>
+        <path d="M30 108l-10 10M150 20l10-10" stroke="#eaf6ff" stroke-width="2" stroke-linecap="round" opacity=".6"/>
+      </svg>
+      <span class="pv-veil-selo">protótipo 2.5D · pausado</span>
+    </div>`,
   horda: `
     <div class="pv pv-horda" style="display:flex;align-items:center;justify-content:center;height:100%;gap:6px">
       <svg viewBox="0 0 120 56" width="150" height="70" fill="#f43f5e" opacity=".9"><circle cx="60" cy="30" r="9" fill="#fbbf24"/><circle cx="20" cy="14" r="5"/><circle cx="34" cy="44" r="5"/><circle cx="96" cy="12" r="5"/><circle cx="104" cy="40" r="5"/><circle cx="82" cy="50" r="4"/><circle cx="44" cy="8" r="4"/></svg>
