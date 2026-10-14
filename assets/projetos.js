@@ -11,7 +11,7 @@ export const categorias = [
   { id: 'infra', nome: 'Infra' },
 ];
 
-export const linguagens = ['JavaScript', 'Python', 'Java'];
+export const linguagens = ['JavaScript', 'Python', 'Java', 'C#'];
 
 export const projetos = [
   {
@@ -41,6 +41,19 @@ export const projetos = [
     demo: 'demos/coroa-de-brasas/',
     codigo: `${GITHUB}/coroa-de-brasas`,
     site: 'https://coroa-de-brasas-demo.vercel.app/baixar',
+  },
+  {
+    id: 'veil-wardens',
+    nome: 'veil-wardens',
+    descricao: 'Protótipo de ação 3D com visual 2.5D em Unity: história de 15 fases, diárias, recompensas e 4 personagens com evolução. Projeto pausado: falta a arte 3D real.',
+    categorias: ['jogos', 'windows'],
+    linguagens: ['C#'],
+    tags: ['Unity 6', 'Cel-shading', 'Combate 2.5D', 'Projeto pausado'],
+    icone: 'coroa',
+    preview: '',
+    status: 'pronto',
+    demo: null,
+    site: 'https://veil-wardens-demo.vercel.app',
   },
   {
     id: 'quorum-trader',
