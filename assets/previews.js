@@ -98,6 +98,8 @@ export const previews = {
     <div class="pv pv-horda" style="display:flex;align-items:center;justify-content:center;height:100%;gap:6px">
       <svg viewBox="0 0 120 56" width="150" height="70" fill="#f43f5e" opacity=".9"><circle cx="60" cy="30" r="9" fill="#fbbf24"/><circle cx="20" cy="14" r="5"/><circle cx="34" cy="44" r="5"/><circle cx="96" cy="12" r="5"/><circle cx="104" cy="40" r="5"/><circle cx="82" cy="50" r="4"/><circle cx="44" cy="8" r="4"/></svg>
     </div>`,
+  reinos: `
+    <div class="pv pv-reinos" style="height:100%;background:#2a2418 url(/assets/construcao/reinos.webp) center/cover no-repeat;border-radius:8px"></div>`,
   coroa: `
     <div class="pv pv-coroa" style="display:flex;align-items:center;justify-content:center;height:100%">
       <svg viewBox="0 0 220 96" width="224" height="98" style="border-radius:8px" aria-hidden="true">

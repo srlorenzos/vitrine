@@ -47,6 +47,18 @@ export const emConstrucao = [
     imagem: null,
   },
   {
+    id: 'coroa-de-brasas',
+    nome: 'Coroa de Brasas',
+    status: 'pausado',
+    fase: 'Pausado para ser refeito do zero; a ideia continua em Reinos em Disputa',
+    etapa: 3,
+    descricao: 'Estratégia por turnos com heróis, exércitos e combate tático em grade hexagonal. Guardado como está.',
+    tags: ['JavaScript', 'Canvas', 'Arte procedural'],
+    icone: 'coroa',
+    preview: 'coroa',
+    imagem: null,
+  },
+  {
     id: 'veil-wardens',
     nome: 'Veil Wardens',
     status: 'pausado',
